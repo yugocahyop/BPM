@@ -1,5 +1,6 @@
 import 'package:blood_pressure_monitoring/page/monitoring/widget/box_bpm.dart';
 import 'package:blood_pressure_monitoring/page/monitoring/widget/monitoring_item_bpm.dart';
+import 'package:blood_pressure_monitoring/page/monitoring/widget/monitoring_item_string_bpm.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 
@@ -42,7 +43,7 @@ class _MonitoringState extends State<Monitoring> {
                 Column(
                   children: [
                     BoxBpm(
-                        width: widthLogical * 0.35,
+                        width: widthLogical * 0.4,
                         height: 125,
                         child: MonitoringItem(
                             title: "Systolic",
@@ -53,7 +54,7 @@ class _MonitoringState extends State<Monitoring> {
                                 "assets/systolic_rotated_bpm.svg"))),
                     MainStyle.sizedBoxH20,
                     BoxBpm(
-                        width: widthLogical * 0.35,
+                        width: widthLogical * 0.4,
                         height: 125,
                         child: MonitoringItem(
                             title: "Diastolic",
@@ -77,6 +78,37 @@ class _MonitoringState extends State<Monitoring> {
               ],
             ),
           ),
+          Padding(
+            padding: const EdgeInsets.symmetric(vertical: 20, horizontal: 8),
+            child: Row(
+                mainAxisAlignment: MainAxisAlignment.spaceAround,
+                children: [
+                  BoxBpm(
+                      width: widthLogical * 0.4,
+                      height: 115,
+                      color: MainStyle.secondaryColor,
+                      child: MonitoringItemString(
+                          isBluetooth: true,
+                          isConnected: false,
+                          title: "Time Record",
+                          value: "17-06-2025 06:53:05",
+                          valueSize: 20,
+                          svgBackground:
+                              SvgPicture.asset("assets/time_rotated_bpm.svg"))),
+                  BoxBpm(
+                      width: widthLogical * 0.4,
+                      height: 115,
+                      color: MainStyle.secondaryColor,
+                      child: MonitoringItemString(
+                          title: "Bluetooth",
+                          value: "BPM001",
+                          isBluetooth: true,
+                          isConnected: false,
+                          valueSize: 20,
+                          svgBackground: SvgPicture.asset(
+                              "assets/bluetooth_rotated_bpm.svg")))
+                ]),
+          )
         ],
       ),
     );
