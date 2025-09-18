@@ -1,3 +1,4 @@
+import 'package:blood_pressure_monitoring/widget/dialogRename.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
@@ -58,6 +59,23 @@ class _Bottom_sheet_bluetoothState extends State<Bottom_sheet_bluetooth>
         }
       });
     }
+  }
+
+  void rescan() {
+    widget.bluetooth_controller.devices.clear();
+    setState(() {});
+    widget.bluetooth_controller.StartScan();
+
+    lottie_controller.reset();
+    lottie_controller
+      ..duration = const Duration(seconds: 5)
+      ..forward();
+
+    Future.delayed(const Duration(seconds: 5), () {
+      if (mounted) {
+        setState(() {});
+      }
+    });
   }
 
   @override
@@ -184,17 +202,17 @@ class _Bottom_sheet_bluetoothState extends State<Bottom_sheet_bluetooth>
                                     padding: const EdgeInsets.all(3.0),
                                     decoration: BoxDecoration(
                                         borderRadius: BorderRadius.circular(60),
-                                        color: MainStyle.primaryColor),
+                                        color: MainStyle.fourthColor),
                                     child: Icon(
                                       Icons.bluetooth,
                                       color: Colors.white,
                                     )),
                                 title: Text(device.device.advName,
                                     style: MyTextStyle.defaultFontCustom(
-                                        MainStyle.primaryColor, 12)),
+                                        Colors.black, 12)),
                                 subtitle: Text(device.device.remoteId.str,
                                     style: MyTextStyle.defaultFontCustom(
-                                        MainStyle.secondaryColor, 12)),
+                                        MainStyle.primaryColor, 12)),
                                 trailing: SizedBox(
                                   width: 55,
                                   child: Row(
@@ -228,35 +246,66 @@ class _Bottom_sheet_bluetoothState extends State<Bottom_sheet_bluetooth>
                           },
                         ),
                       ),
-                MyButton(
-                    color: MainStyle.primaryColor,
-                    text: widget.bluetooth_controller.currDevice != null
-                        ? "Disconnect"
-                        : "Scan for New Devices",
-                    onPressed: () async {
-                      if (widget.bluetooth_controller.currDevice != null) {
-                        await widget.bluetooth_controller.disconnect();
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    MyButton(
+                        width: widget.bluetooth_controller.isConnected
+                            ? lWidth * 0.39
+                            : lWidth * 0.9,
+                        color: MainStyle.primaryColor,
+                        text: widget.bluetooth_controller.isConnected
+                            ? "Disconnect"
+                            : "Scan for New Devices",
+                        onPressed: () async {
+                          if (widget.bluetooth_controller.isConnected) {
+                            await widget.bluetooth_controller.disconnect();
 
-                        setState(() {});
-                        return;
-                      }
+                            setState(() {});
+                            return;
+                          }
 
-                      widget.bluetooth_controller.devices.clear();
-                      setState(() {});
-                      widget.bluetooth_controller.StartScan();
+                          // widget.bluetooth_controller.devices.clear();
+                          // setState(() {});
+                          // widget.bluetooth_controller.StartScan();
 
-                      lottie_controller.reset();
-                      lottie_controller
-                        ..duration = const Duration(seconds: 5)
-                        ..forward();
+                          // lottie_controller.reset();
+                          // lottie_controller
+                          //   ..duration = const Duration(seconds: 5)
+                          //   ..forward();
 
-                      Future.delayed(const Duration(seconds: 5), () {
-                        if (mounted) {
-                          setState(() {});
-                        }
-                      });
-                    },
-                    textColor: Colors.white)
+                          // Future.delayed(const Duration(seconds: 5), () {
+                          //   if (mounted) {
+                          //     setState(() {});
+                          //   }
+                          // });
+                          rescan();
+                        },
+                        textColor: Colors.white),
+                    MainStyle.sizedBoxW10,
+                    Visibility(
+                      visible: widget.bluetooth_controller.isConnected,
+                      child: MyButton(
+                          width: lWidth * 0.39,
+                          color: MainStyle.thirdColor,
+                          text: "Rename",
+                          onPressed: () async {
+                            final c = Controller();
+                            await c.goToDialog(
+                                context,
+                                RenameDialog(
+                                    bluetoothController:
+                                        widget.bluetooth_controller,
+                                    name: widget.bluetooth_controller
+                                        .currDevice!.advName));
+                            await widget.bluetooth_controller.disconnect();
+                            setState(() {});
+                            rescan();
+                          },
+                          textColor: Colors.white),
+                    ),
+                  ],
+                )
               ],
             ),
           );

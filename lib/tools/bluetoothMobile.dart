@@ -19,7 +19,7 @@ class BluetoothLeMobile {
   // BluetoothCharacteristic? notifyChars;
   List<int> data = [];
   BluetoothDevice? currDevice;
-  int mtu = 0;
+  int mtu = 250;
   Function(List<int> data)? listenFunction;
 
   void setListenFunction(f(dynamic data)) {
@@ -51,7 +51,7 @@ class BluetoothLeMobile {
     if (isScanning) await StopScan();
 
     isScanning = true;
-    // if(scanSub != null) await scanSub!.cancel();
+    if (scanSub != null) scanSub!.cancel();
 
     try {
       await Future.delayed(const Duration(seconds: 1));
@@ -288,15 +288,18 @@ class BluetoothLeMobile {
 
     final packet = splitPacket(data);
 
+    // print(packet.length);
+
     for (var i = 0; i < packet.length; i++) {
-      writeChars!.write(packet[i]);
+      writeChars!.write(packet[i], allowLongWrite: true);
+
+      // print(packet[i]);
 
       await Future.delayed(const Duration(milliseconds: 200));
     }
   }
 
   Future<void> write(dynamic data) async {
-    // print(data);
     if (!isConnected) return;
     if (data is String) {
       final sendData = utf8.encode(data);
@@ -309,6 +312,8 @@ class BluetoothLeMobile {
     if (writeChars != null) {
       // writeChars!.write( data);
       sendPacket(data);
+
+      // print(data);
 
       Future.delayed(const Duration(seconds: 5), () => disconnect());
     }

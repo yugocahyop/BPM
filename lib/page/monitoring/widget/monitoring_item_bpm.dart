@@ -1,10 +1,12 @@
 import 'package:blood_pressure_monitoring/style/textStyle.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 
 class MonitoringItem extends StatelessWidget {
   MonitoringItem(
       {super.key,
+      required this.isConnected,
       required this.title,
       required this.value,
       required this.unit,
@@ -12,10 +14,11 @@ class MonitoringItem extends StatelessWidget {
       required this.svgBackground});
 
   String title;
-  int value;
+  int? value;
   String unit;
   double valueSize;
   SvgPicture svgBackground;
+  bool isConnected;
 
   @override
   Widget build(BuildContext context) {
@@ -51,16 +54,20 @@ class MonitoringItem extends StatelessWidget {
                       textAlign: TextAlign.start,
                     ),
                   ),
-                  SizedBox(
-                    width: widhtLogical,
-                    child: Text(
-                      "$value",
-                      style: MyTextStyle.defaultFontCustom(
-                          Colors.white, valueSize,
-                          weight: FontWeight.w500),
-                      textAlign: TextAlign.center,
-                    ),
-                  ),
+                  isConnected && value == null
+                      ? const SpinKitRing(
+                          color: Colors.white,
+                        )
+                      : SizedBox(
+                          width: widhtLogical,
+                          child: Text(
+                            !isConnected || value == null ? "---" : "$value",
+                            style: MyTextStyle.defaultFontCustom(
+                                Colors.white, valueSize,
+                                weight: FontWeight.w500),
+                            textAlign: TextAlign.center,
+                          ),
+                        ),
                   SizedBox(
                     width: widhtLogical,
                     child: Text(

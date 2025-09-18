@@ -1,5 +1,6 @@
 import 'dart:io';
 
+import 'package:blood_pressure_monitoring/global/globalProvider.dart';
 import 'package:device_info_plus/device_info_plus.dart';
 
 import 'package:flutter/cupertino.dart';
@@ -64,7 +65,7 @@ class Controller {
     return await showDialog(
         context: context,
         builder: ((context) {
-          return w;
+          return Globalprovider(child: w);
         }));
   }
 
@@ -155,7 +156,7 @@ class Controller {
         context,
         MaterialPageRoute(
             settings: RouteSettings(name: name ?? ""),
-            maintainState: false,
+            maintainState: true,
             fullscreenDialog: false,
             builder: (BuildContext context) {
               return w;
@@ -167,7 +168,7 @@ class Controller {
         context,
         CupertinoPageRoute(
             settings: RouteSettings(name: name ?? ""),
-            maintainState: true,
+            maintainState: false,
             fullscreenDialog: false,
             builder: (BuildContext context) {
               return w;

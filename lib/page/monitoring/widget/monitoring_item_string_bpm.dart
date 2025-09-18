@@ -1,3 +1,4 @@
+import 'package:blood_pressure_monitoring/style/mainStyle.dart';
 import 'package:blood_pressure_monitoring/style/textStyle.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
@@ -51,30 +52,40 @@ class MonitoringItemString extends StatelessWidget {
                         // width: widhtLogical,
                         child: Text(
                           title,
-                          style: MyTextStyle.defaultFontCustom(Colors.black, 14,
+                          style: MyTextStyle.defaultFontCustom(
+                              MainStyle.thirdColor, 14,
                               weight: FontWeight.w500),
                           textAlign: TextAlign.start,
                         ),
                       ),
-                      Container(
-                        width: 25,
-                        height: 25,
-                        decoration: BoxDecoration(
-                          color: const Color(0xff34C759),
-                          borderRadius: BorderRadius.circular(8)
+                      Visibility(
+                        visible: isBluetooth,
+                        child: AnimatedContainer(
+                          duration: const Duration(milliseconds: 300),
+                          width: 25,
+                          height: 25,
+                          decoration: BoxDecoration(
+                              color: !isConnected
+                                  ? const Color(0xffC73434)
+                                  : const Color(0xff34C759),
+                              borderRadius: BorderRadius.circular(8)),
+                          alignment: Alignment.center,
+                          // padding: EdgeInsets.all(3),
+                          child: Icon(
+                            Icons.bluetooth,
+                            color: Colors.white,
+                            size: 15,
+                          ),
                         ),
-                        alignment: Alignment.center,
-                        // padding: EdgeInsets.all(3),
-                        child: Icon(Icons.bluetooth, color: Colors.white, size: 15,),
                       )
                     ],
                   ),
                   SizedBox(
                     width: widhtLogical,
                     child: Text(
-                      value,
+                      !isConnected ? "---" : value,
                       style: MyTextStyle.defaultFontCustom(
-                          Colors.black, valueSize,
+                          MainStyle.thirdColor, valueSize,
                           weight: FontWeight.w500),
                       textAlign: TextAlign.center,
                     ),

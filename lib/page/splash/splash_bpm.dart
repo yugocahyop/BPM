@@ -4,6 +4,7 @@ import 'package:blood_pressure_monitoring/style/textStyle.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_svg/svg.dart';
+import 'package:wakelock_plus/wakelock_plus.dart';
 
 import '../../controller/controller.dart';
 
@@ -33,6 +34,8 @@ class _SplashState extends State<Splash> {
   void initState() {
     // TODO: implement initState
     super.initState();
+
+    WakelockPlus.enable();
 
     SystemChrome.setSystemUIOverlayStyle(
         SystemUiOverlayStyle(statusBarColor: Colors.transparent));

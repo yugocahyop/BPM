@@ -42,7 +42,7 @@ class BottomNav extends StatelessWidget {
           children: nav_button
               .map((e) => SizedBox(
                     width: 110,
-                    height: 80,
+                    height: 65,
                     child: Padding(
                       padding: const EdgeInsets.symmetric(horizontal: 3),
                       child: Material(
@@ -56,7 +56,7 @@ class BottomNav extends StatelessWidget {
                               Center(
                                 child: AnimatedContainer(
                                   width: (e["page"] as int) == page ? 122 : 0,
-                                  height: 80,
+                                  height: 65,
                                   duration: const Duration(milliseconds: 100),
                                   curve: Curves.easeIn,
                                   decoration: BoxDecoration(

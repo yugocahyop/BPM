@@ -1,5 +1,6 @@
 import 'dart:convert';
 import 'package:blood_pressure_monitoring/model/bpmJsonFileDataModel.dart';
+import 'package:blood_pressure_monitoring/page/file/widget/fileItem_bpm.dart';
 import 'package:flutter/material.dart';
 import 'package:sembast/sembast.dart';
 
@@ -33,15 +34,30 @@ class JsonFileDataController {
     currentData.content = "";
   }
 
-  add(JsonFileDataModel f) {
-    db.add(f.toJson(), SembastDb2.BPM);
+  add(JsonFileDataModel f) async {
+    final file = await db.find(SembastDb2.file,
+        finder: Finder(sortOrders: [SortOrder("time", false)]));
+    // print(file);
+
+    final lastNum = file.isEmpty
+        ? 0
+        : int.tryParse((file.last["fileName"] as String)
+                .split("_")
+                .last
+                .split(".")
+                .first) ??
+            0;
+
+    f.fileName = "JSON_File_${lastNum + 1}.json";
+
+    db.add(f.toJson(), SembastDb2.file);
   }
 
   Future<void> find(int offset, Function setState) async {
     if (offset == 0) list.clear();
-    final r = await db.find(SembastDb2.BPM,
+    final r = await db.find(SembastDb2.file,
         finder: Finder(
-            offset: offset, limit: 50, sortOrders: [SortOrder("date", false)]));
+            offset: offset, limit: 50, sortOrders: [SortOrder("time", false)]));
 
     for (var i = 0; i < r.length; i++) {
       final fh = JsonFileDataModel.fromJson(r[i].value);
@@ -56,16 +72,18 @@ class JsonFileDataController {
 
   Future<int> count() async {
     await db.wait();
-    max = await db.count(SembastDb2.BPM);
+    max = await db.count(SembastDb2.file);
+    // print("count $max");
     return max;
   }
 
   Future<void> deleteFirst() async {
-    final firstData = await db.find(SembastDb2.BPM,
-        finder: Finder(sortOrders: [SortOrder("date", true)], limit: 1));
-    // print(firstData.first["date"]);
-    db.delete(Finder(filter: Filter.equals("date", firstData.first["date"])),
-        SembastDb2.BPM);
+    final firstData = await db.find(SembastDb2.file,
+        finder: Finder(sortOrders: [SortOrder("time", true)], limit: 1));
+    if (firstData.isEmpty) return;
+    // print(firstData.first);
+    db.delete(Finder(filter: Filter.equals("time", firstData.first["time"])),
+        SembastDb2.file);
   }
 
   Future<void> deletePrompt(int index, int date, BuildContext context,
@@ -81,12 +99,13 @@ class JsonFileDataController {
             textButton1: "Yes, delete",
             actionColor: const Color(0xffC73434),
             buttonAction1: () => db.delete(
-                Finder(filter: Filter.equals("date", date)), SembastDb2.BPM)));
+                Finder(filter: Filter.equals("time", date)), SembastDb2.file)));
 
     if (r != null && r) {
       final m = list[index];
       key.currentState!.removeItem(index, (c, a) {
-        return SizedBox();
+        return FileitemBpm(
+            animation: a, fdm: m, isDelete: isDelete, onDelete: () {});
       });
       list.removeAt(index);
 
@@ -105,7 +124,7 @@ class JsonFileDataController {
             subtitle: "you will not be able to recover them afterwards.",
             textButton1: "Yes, delete",
             actionColor: const Color(0xffC73434),
-            buttonAction1: () => db.delete(Finder(), SembastDb2.BPM)));
+            buttonAction1: () => db.delete(Finder(), SembastDb2.file)));
 
     if (r != null && r) {
       list.clear();

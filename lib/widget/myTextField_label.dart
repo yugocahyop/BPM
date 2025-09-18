@@ -99,9 +99,9 @@ class _Mytextfield_labelState extends State<Mytextfield_label> {
           key: widget.shake,
           child: TextField(
             onChanged: (text) {
-              if (text.isNotEmpty) {
-                widget.con.text = text[text.length - 1];
-              }
+              // if (text.isNotEmpty) {
+              //   widget.con.text = text[text.length - 1];
+              // }
             },
             textCapitalization: widget.isCapitalize
                 ? (widget.con.text.length < 1

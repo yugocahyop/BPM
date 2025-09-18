@@ -1,6 +1,8 @@
 import 'dart:convert';
 
 import 'package:blood_pressure_monitoring/model/bpmDataModel.dart';
+import 'package:blood_pressure_monitoring/page/history/widget/historyItem_bpm.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:sembast/sembast.dart';
 
@@ -21,6 +23,8 @@ class BPMDataController {
   int previousIncomplete = 0;
   List<String> completedJson = [];
   Map<int, List<String>> processedJson = {};
+  String prevDecoded = "";
+  Map<int, BpmDataModel> processedData = {};
 
   BPMDataController() {
     db = SembastDb2();
@@ -34,9 +38,17 @@ class BPMDataController {
   }
 
   void reset() {
-    currentData.diastolic = 0;
-    currentData.systolic = 0;
-    currentData.heartRate = 0;
+    currentData.diastolic = null;
+    currentData.systolic = null;
+    currentData.heartRate = null;
+    previousIncomplete = 0;
+    buffer = "";
+    completedJson.clear();
+    processedJson.clear();
+    processedData.clear();
+    prevDecoded = "";
+
+    currentData.time = DateTime.now().toUtc().millisecondsSinceEpoch;
   }
 
   add(BpmDataModel f) {
@@ -47,7 +59,7 @@ class BPMDataController {
     if (offset == 0) list.clear();
     final r = await db.find(SembastDb2.BPM,
         finder: Finder(
-            offset: offset, limit: 50, sortOrders: [SortOrder("date", false)]));
+            offset: offset, limit: 50, sortOrders: [SortOrder("time", false)]));
 
     for (var i = 0; i < r.length; i++) {
       final fh = BpmDataModel.fromJson(r[i].value);
@@ -68,9 +80,9 @@ class BPMDataController {
 
   Future<void> deleteFirst() async {
     final firstData = await db.find(SembastDb2.BPM,
-        finder: Finder(sortOrders: [SortOrder("date", true)], limit: 1));
+        finder: Finder(sortOrders: [SortOrder("time", true)], limit: 1));
     // print(firstData.first["date"]);
-    db.delete(Finder(filter: Filter.equals("date", firstData.first["date"])),
+    db.delete(Finder(filter: Filter.equals("time", firstData.first["time"])),
         SembastDb2.BPM);
   }
 
@@ -87,12 +99,13 @@ class BPMDataController {
             textButton1: "Yes, delete",
             actionColor: const Color(0xffC73434),
             buttonAction1: () => db.delete(
-                Finder(filter: Filter.equals("date", date)), SembastDb2.BPM)));
+                Finder(filter: Filter.equals("time", date)), SembastDb2.BPM)));
 
     if (r != null && r) {
       final m = list[index];
       key.currentState!.removeItem(index, (c, a) {
-        return SizedBox();
+        return HistoryitemBpm(
+            animation: a, fdm: m, isDelete: isDelete, onDelete: () {});
       });
       list.removeAt(index);
 
@@ -125,10 +138,18 @@ class BPMDataController {
     currentData.heartRate = fm.heartRate;
   }
 
-  void completeJson(String buffer, String data, int index) {
-    buffer += data.substring(0, index + 1);
+  void completeJson(String data, int index) {
+    // buffer += data.substring(0, index + 1);
 
-    completedJson.add(buffer);
+    completedJson.add(
+      "${buffer.substring(buffer.indexOf(
+            "{",
+          )) + data.substring(0, index + 1)}",
+    );
+
+    // print("incomplete complete1: $data");
+
+    // print("incomplete complete: ${completedJson[0]}");
 
     buffer = "";
   }
@@ -141,8 +162,14 @@ class BPMDataController {
     for (var i = 0; i < s.length; i++) {
       if (s[i] == "{") {
         bracketLeft++;
-      } else if (s[i] == "}") {
+        // print(
+        //   "incomplete: ${s[i]}",
+        // );
+      } else if (s[i] == "}" && isBracketStart) {
         bracketLeft--;
+        // print(
+        //   "incomplete: ${s[i]}",
+        // );
       }
 
       if (!isBracketStart && bracketLeft >= 1) {
@@ -150,8 +177,10 @@ class BPMDataController {
       }
 
       if (isBracketStart && bracketLeft == 0) {
-        completeJson(buffer, s, i);
+        completeJson(s, i);
         newJson = s.substring(i + 1);
+
+        isBracketStart = false;
       }
     }
 
@@ -167,6 +196,10 @@ class BPMDataController {
       processedJson.putIfAbsent(time, () => []);
       processedJson[time]!.add(processedString);
     }
+
+    if (processedJson[time]!.length > 2 && currentData.time == time) {
+      add(currentData);
+    }
   }
 
   bool isProcessedJsonComplete(int time) {
@@ -178,34 +211,103 @@ class BPMDataController {
   }
 
   int getTimeInMillisecondUtc(String timeString) {
-    return DateTime.parse(
-            timeString.substring(0, timeString.indexOf("+")) + "Z")
+    return DateTime.parse("${timeString.substring(0, timeString.indexOf("+"))}")
         .toUtc()
         .millisecondsSinceEpoch;
+  }
+
+  addProcessedData(BpmDataModel d) {
+    if (processedData.containsKey(d.time)) {
+      final p = processedData[d.time];
+
+      p!.heartRate = d.heartRate ?? p!.heartRate;
+      p!.diastolic = d.diastolic ?? p!.diastolic;
+      p!.systolic = d.systolic ?? p!.systolic;
+
+      if (p!.heartRate != null && p!.diastolic != null && p!.systolic != null) {
+        add(p);
+
+        processedData.remove(d.time);
+      }
+
+      return;
+    }
+    processedData.putIfAbsent(d.time, () => d);
   }
 
   BpmDataModel? processData(List<int> data) {
     // print(data);
     try {
       if (data.contains(0)) {
-        final dataClean = data.getRange(0, data.indexOf(125) + 1).toList();
+        final dataClean = data.getRange(0, data.indexOf(0)).toList();
         data = dataClean;
       }
 
       final decoded = utf8.decode(data, allowMalformed: true);
+      // print(
+      //   "incomplete: $decoded",
+      // );
 
-      // print(decoded);
+      if (buffer.isEmpty &&
+          !(decoded.replaceAll(" ", "")).contains("{\n\"res")) {
+        return null;
+      }
 
-      int incompleteJsonNum =
-          incompleteJsonCount(decoded, previousBracketNum: previousIncomplete);
+      if (prevDecoded == decoded) {
+        return null;
+      }
 
-      previousIncomplete = incompleteJsonNum;
+      prevDecoded = decoded;
 
-      buffer += decoded;
+      // print(
+      //   "incomplete: $decoded",
+      // );
+
+      if (decoded.isNotEmpty) {
+        int incompleteJsonNum = incompleteJsonCount(decoded,
+            previousBracketNum: previousIncomplete);
+        // print(
+        //   "incomplete num: $incompleteJsonNum",
+        // );
+
+        previousIncomplete = incompleteJsonNum;
+
+        // if (buffer.isEmpty) {
+        //   buffer += decoded.substring(decoded.indexOf(
+        //     "{",
+        //   ));
+        // } else {
+        buffer += decoded;
+        // }
+
+        // print(
+        //   "prev incomplete: $previousIncomplete",
+        // );
+      }
+
+      // print(buffer);
 
       if (completedJson.isNotEmpty) {
         final processedString = completedJson.removeAt(0);
-        Map<String, dynamic> json = jsonDecode(processedString);
+        // print(
+        //   "processed Json incomplete: ${processedString.substring(processedString.indexOf(",\n    \"div\" :"), processedString.indexOf("</div>\"\n") + 8)}",
+        // );
+
+        final replacedStering =
+            processedString.replaceAll(" ", "").replaceAll("\n", "");
+        Map<String, dynamic> json =
+            jsonDecode(replacedStering.indexOf(",\"div\":") == -1
+                ? processedString
+                : (replacedStering.replaceAll(
+                    replacedStering.substring(
+                        replacedStering.indexOf(",\"div\":"),
+                        replacedStering.indexOf("</div>\"") + 7),
+                    "",
+                  )));
+
+        // print(
+        //   "processed Json incomplete2: $json",
+        // );
 
         if (json.containsKey("component")) {
           currentData.systolic = json["component"][0]["valueQuantity"]["value"];
@@ -213,6 +315,7 @@ class BPMDataController {
               json["component"][1]["valueQuantity"]["value"];
           String timeString = (json["effectiveDateTime"] as String);
           int time = getTimeInMillisecondUtc(timeString);
+          currentData.time = time;
 
           addProcessedJson(time, processedString);
 
@@ -225,6 +328,7 @@ class BPMDataController {
           currentData.heartRate = json["valueQuantity"]["value"];
           String timeString = (json["effectiveDateTime"] as String);
           int time = getTimeInMillisecondUtc(timeString);
+          currentData.time = time;
 
           addProcessedJson(time, processedString);
 
@@ -238,7 +342,12 @@ class BPMDataController {
 
       // print(BPMData.suhu);
     } catch (e) {
+      if (kDebugMode) {
+        print(e);
+      }
       return null;
     }
+
+    return null;
   }
 }

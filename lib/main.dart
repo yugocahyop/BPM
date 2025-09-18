@@ -1,3 +1,5 @@
+import 'package:blood_pressure_monitoring/global/globalProvider.dart';
+import 'package:blood_pressure_monitoring/navigation/myNavigation.dart';
 import 'package:blood_pressure_monitoring/page/splash/splash_bpm.dart';
 import 'package:flutter/material.dart';
 
@@ -32,7 +34,14 @@ class MyApp extends StatelessWidget {
         colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple),
         useMaterial3: true,
       ),
-      home: const Splash(),
+      home: Globalprovider(child: const MyNavigation()),
+      builder: (context, child) {
+        return MediaQuery(
+          child: child!,
+          data: MediaQuery.of(context)
+              .copyWith(textScaler: const TextScaler.linear(1.0)),
+        );
+      },
     );
   }
 }
