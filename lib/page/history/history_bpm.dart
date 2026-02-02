@@ -1,16 +1,9 @@
 import 'package:blood_pressure_monitoring/controller/bpmDataController.dart';
-<<<<<<< HEAD
-import 'package:blood_pressure_monitoring/page/history/widget/deleteBar_bpm.dart';
-import 'package:blood_pressure_monitoring/page/history/widget/historyItem_bpm.dart';
-import 'package:blood_pressure_monitoring/page/history/widget/historyTitle_bpm.dart';
-import 'package:flutter/material.dart';
-=======
 import 'package:blood_pressure_monitoring/page/page2/widget/deleteBar_bpm.dart';
 import 'package:blood_pressure_monitoring/page/history/widget/historyItem_bpm.dart';
 import 'package:blood_pressure_monitoring/page/history/widget/historyTitle_bpm.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
->>>>>>> 7753693 (2026 feb 2 2)
 import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:loadmore_listview/loadmore_listview.dart';
@@ -19,23 +12,19 @@ import '../../style/mainStyle.dart';
 import '../../style/textStyle.dart';
 
 class HistoryBpm extends StatefulWidget {
-<<<<<<< HEAD
-  HistoryBpm({super.key, required this.bdc});
-
-  BPMDataController bdc;
-=======
   HistoryBpm(
       {super.key,
       required this.bdc,
       required this.isDelete,
       this.onTap,
+      this.isRefresh = true,
       this.padding = const EdgeInsets.only(left: 8.0, right: 8, top: 20)});
 
   BPMDataController bdc;
   EdgeInsets padding;
   Function? onTap;
   bool isDelete;
->>>>>>> 7753693 (2026 feb 2 2)
+  bool isRefresh;
 
   @override
   State<HistoryBpm> createState() => _HistoryBpmState();
@@ -51,44 +40,11 @@ class _HistoryBpmState extends State<HistoryBpm> {
     final lHeight = MediaQuery.of(context).size.height;
 
     return Padding(
-<<<<<<< HEAD
-      padding: const EdgeInsets.only(left: 8.0, right: 8, top: 20),
-      child: Column(
-        mainAxisAlignment: MainAxisAlignment.start,
-        children: [
-          Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: [
-              Text(
-                "History",
-                style: MyTextStyle.defaultFontCustom(MainStyle.thirdColor, 21,
-                    weight: FontWeight.bold),
-              ),
-              DeleteBar(
-                  isDeleting: isDeleting,
-                  showDelete: showDelete,
-                  onClearAll: () =>
-                      widget.bdc.deleteAll(context, () => setState(() {})),
-                  onDeleteCancel: () {
-                    setState(() {
-                      isDeleting = false;
-                    });
-                  },
-                  onThrashTap: () {
-                    setState(() {
-                      isDeleting = true;
-                    });
-                  })
-            ],
-          ),
-          MainStyle.sizedBoxH20,
-=======
       padding: widget.padding,
       child: Column(
         mainAxisAlignment: MainAxisAlignment.start,
         children: [
           // MainStyle.sizedBoxH20,
->>>>>>> 7753693 (2026 feb 2 2)
           HistorytitleBpm(),
           Expanded(
             child: widget.bdc.list.isEmpty
@@ -146,7 +102,7 @@ class _HistoryBpmState extends State<HistoryBpm> {
                       //     widget.bdc.list.length -
                       //         (widget.bdc.list.length - 20));
                     },
-                    onRefresh: () => widget.bdc.find(0, () {
+                    onRefresh: widget.isRefresh ? () => widget.bdc.find(0, () {
                       if (mounted) {
                         // setState(() {});
                         // keyAnimatedList.currentState!.reassemble();
@@ -155,30 +111,16 @@ class _HistoryBpmState extends State<HistoryBpm> {
                         keyAnimatedList.currentState!
                             .insertAllItems(0, widget.bdc.list.length);
                       }
-                    }),
+                    }) : null,
                     loadMoreWidget: Container(
                         margin: const EdgeInsets.all(20.0),
                         alignment: Alignment.center,
                         child: const SpinKitThreeBounce(
                           color: MainStyle.whiteColor,
                         )),
-<<<<<<< HEAD
-                    itemBuilder: (context, i, animation) => HistoryitemBpm(
-                      isDelete: isDeleting,
-                      fdm: widget.bdc.list[i],
-                      animation: animation,
-                      // model: widget.fhc.list[i],
-                      onDelete: () => widget.bdc.deletePrompt(
-                          i, widget.bdc.list[i].time, context, () {
-                        if (mounted) {
-                          setState(() {});
-                        }
-                      }, keyAnimatedList),
-                      // isDelete: widget.fhc.isDelete,
-=======
                     itemBuilder: (context, i, animation) => GestureDetector(
                       onTap: () =>
-                          widget.onTap == null ? () {} : widget.onTap!(),
+                          widget.onTap == null ? (i) {} : widget.onTap!(i),
                       child: HistoryitemBpm(
                         isDelete: widget.isDelete,
                         fdm: widget.bdc.list[i],
@@ -192,7 +134,6 @@ class _HistoryBpmState extends State<HistoryBpm> {
                         }, keyAnimatedList),
                         // isDelete: widget.fhc.isDelete,
                       ),
->>>>>>> 7753693 (2026 feb 2 2)
                     ),
                   ),
           )

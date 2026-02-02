@@ -1,4 +1,4 @@
-import 'dart:ffi';
+// import 'dart:ffi';
 
 import 'package:blood_pressure_monitoring/page/home/home_bpm.dart';
 import 'package:blood_pressure_monitoring/style/mainStyle.dart';
@@ -19,28 +19,23 @@ class Splash extends StatefulWidget {
   State<Splash> createState() => _SplashState();
 }
 
-class _SplashState extends State<Splash>  {
-  
+class _SplashState extends State<Splash> {
   checkRequirementAndChangePage() async {
     final c = Controller();
     await c.checkPermission();
 
-    
-    Future.delayed(const Duration(milliseconds: 5000), () {
+    Future.delayed(const Duration(milliseconds: 3000), () {
       final c = Controller();
-      c.pageRouteReplace(context,  Home());
+      c.heroPageRoute(context, Home());
     });
   }
+
+  
 
   @override
   void initState() {
     super.initState();
 
-<<<<<<< HEAD
-    WakelockPlus.enable();
-
-=======
-    
     WakelockPlus.enable();
 
     NotificationService.onNotificationTapped = (payload) {
@@ -48,11 +43,7 @@ class _SplashState extends State<Splash>  {
     };
     NotificationService.init();
 
->>>>>>> 7753693 (2026 feb 2 2)
-    SystemChrome.setSystemUIOverlayStyle(
-        const SystemUiOverlayStyle(statusBarColor: Colors.transparent));
-
-        // _topAnimationController.forward();
+    // _topAnimationController.forward();
 
     checkRequirementAndChangePage();
   }
@@ -74,30 +65,37 @@ class _SplashState extends State<Splash>  {
         height: heightLogical,
         child: Column(
           children: [
-           SvgPicture.asset(
-                "assets/topSplash_bpm.svg",
-                width: widthLogical,
-              ),
-            
+            SvgPicture.asset(
+              "assets/topSplash_bpm.svg",
+              width: widthLogical,
+            ),
             Expanded(
               child: Column(
                 mainAxisAlignment: MainAxisAlignment.center,
                 crossAxisAlignment: CrossAxisAlignment.center,
                 children: [
-                  SvgPicture.asset(
-                    "assets/logo_bpm.svg",
-                    width: widthLogical * 0.5,
-                    fit: BoxFit.fill,
+                  Hero(
+                    tag: "logo_bpm",
+                    child: SizedBox(
+                      width: widthLogical * 0.5,
+                      child: SvgPicture.asset(
+                        "assets/logo_blop_bpm.svg",
+                        width: widthLogical * 0.5,
+                        fit: BoxFit.fill,
+                      ),
+                    ),
                   ),
                   MainStyle.sizedBoxH20,
                   Text(
                     "Blood Pressure",
-                    style: MyTextStyle.defaultFontCustom(MainStyle.thirdColor, 34,
+                    style: MyTextStyle.defaultFontCustom(
+                        MainStyle.thirdColor, 34,
                         weight: FontWeight.w800),
                   ),
                   Text(
                     "Monitoring",
-                    style: MyTextStyle.defaultFontCustom(MainStyle.thirdColor, 34,
+                    style: MyTextStyle.defaultFontCustom(
+                        MainStyle.thirdColor, 34,
                         weight: FontWeight.w800),
                   )
                 ],

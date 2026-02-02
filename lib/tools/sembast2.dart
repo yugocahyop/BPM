@@ -11,11 +11,13 @@ class SembastDb2 {
   final storeBPM = intMapStoreFactory.store('BPM');
   final storeBPMfile = intMapStoreFactory.store('fileBpm');
   final storeEepromBPM = intMapStoreFactory.store('eepromBPM');
+  final storeEepromDataBPM = intMapStoreFactory.store('eepromDataBPM');
   final storeEepromBPMfile = intMapStoreFactory.store('eepromFileBpm');
 
   static const String BPM = "BPM";
   static const String file = "fileBpm";
   static const String eepromBPM = "eepromBPM";
+  static const String eepromDataBPM = "eepromDataBPM";
   static const String eepromFile = "eepromFileBpm";
 
   var _db;
@@ -47,6 +49,8 @@ class SembastDb2 {
         return storeBPMfile;
       case SembastDb2.eepromBPM:
         return storeEepromBPM;
+      case SembastDb2.eepromDataBPM:
+        return storeEepromDataBPM;
       case SembastDb2.eepromFile:
         return storeEepromBPMfile;
     }

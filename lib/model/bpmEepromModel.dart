@@ -12,6 +12,12 @@ class EepromModel {
     required this.time,
   });
 
+  @override
+  String toString() {
+    // TODO: implement toString
+    return 'EepromModel{id: $id, time: $time}';
+  }
+
   factory EepromModel.fromJson(Map<String, dynamic> json) =>
       _$BpmEepromModelFromJson(json);
 

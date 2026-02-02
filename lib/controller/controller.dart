@@ -194,7 +194,7 @@ class Controller {
     return await Navigator.push(
         context,
         HeroDialogRoute(
-            settings: RouteSettings(name: name ?? ""),
+            // settings: RouteSettings(name: name ?? ""),
             builder: (BuildContext context) {
               return w;
             }));

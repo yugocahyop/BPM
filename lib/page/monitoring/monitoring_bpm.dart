@@ -1,19 +1,12 @@
 import 'package:blood_pressure_monitoring/controller/bpmDataController.dart';
-<<<<<<< HEAD
-import 'package:blood_pressure_monitoring/controller/bpmJsonFileDataController%20copy.dart';
-=======
 import 'package:blood_pressure_monitoring/controller/bpmJsonFileDataController.dart';
 import 'package:blood_pressure_monitoring/controller/controller.dart';
->>>>>>> 7753693 (2026 feb 2 2)
 import 'package:blood_pressure_monitoring/model/bpmJsonFileDataModel.dart';
 import 'package:blood_pressure_monitoring/page/monitoring/widget/box_bpm.dart';
 import 'package:blood_pressure_monitoring/page/monitoring/widget/monitoring_item_bpm.dart';
 import 'package:blood_pressure_monitoring/page/monitoring/widget/monitoring_item_string_bpm.dart';
 import 'package:blood_pressure_monitoring/tools/bluetoothMobile.dart';
-<<<<<<< HEAD
-=======
 import 'package:blood_pressure_monitoring/widget/dialogBox_xirkabit.dart';
->>>>>>> 7753693 (2026 feb 2 2)
 import 'package:flutter/material.dart';
 import 'package:flutter_blue_plus/flutter_blue_plus.dart';
 import 'package:flutter_svg/flutter_svg.dart';
@@ -41,8 +34,6 @@ class Monitoring extends StatefulWidget {
 class _MonitoringState extends State<Monitoring> {
   final DateFormat df = DateFormat("dd-MM-yyyy HH:mm:ss");
 
-<<<<<<< HEAD
-=======
   Future<void> listenFunction(data) async {
     final r = widget.bdc.processData(data);
 
@@ -64,7 +55,7 @@ class _MonitoringState extends State<Monitoring> {
         });
       }
 
-      widget.bdc.addProcessedData(r);
+      await widget.bdc.addProcessedData(r);
 
       widget.bdc.count().then((c) {
         if (c >= 50) {
@@ -78,7 +69,6 @@ class _MonitoringState extends State<Monitoring> {
     }
   }
 
->>>>>>> 7753693 (2026 feb 2 2)
   @override
   void initState() {
     // TODO: implement initState
@@ -90,42 +80,7 @@ class _MonitoringState extends State<Monitoring> {
     }
 
     widget.bluetoothController.listenFunction = (data) {
-<<<<<<< HEAD
-      final r = widget.bdc.processData(data);
-
-      if (r != null) {
-        if (widget.bdc.processedJson[r.time] == null) return;
-        if (widget.bdc.processedJson[r.time]!.length == 2) {
-          widget.fdc.add(JsonFileDataModel(
-              fileName: "",
-              content:
-                  "${widget.bdc.processedJson[r.time]![0]}\n\n${widget.bdc.processedJson[r.time]![1]}",
-              time: r.time));
-
-          widget.bdc.processedJson[r.time]!.clear();
-
-          widget.fdc.count().then((c) {
-            if (c >= 50) {
-              widget.fdc.deleteFirst();
-            }
-          });
-        }
-
-        widget.bdc.addProcessedData(r);
-
-        widget.bdc.count().then((c) {
-          if (c >= 50) {
-            widget.bdc.deleteFirst();
-          }
-        });
-      }
-
-      if (mounted) {
-        setState(() {});
-      }
-=======
       listenFunction(data);
->>>>>>> 7753693 (2026 feb 2 2)
     };
   }
 
@@ -260,8 +215,6 @@ class _MonitoringState extends State<Monitoring> {
                                         ? null
                                         : widget.bluetoothController.currDevice!
                                             .remoteId.str;
-<<<<<<< HEAD
-=======
                                 var isOn = await widget.bluetoothController
                                     .checkBluetoothOn();
                                 final lWidth =
@@ -299,10 +252,11 @@ class _MonitoringState extends State<Monitoring> {
                                           .checkBluetoothOn();
                                       
                                     }
+                                  }else{
+                                    return ;
                                   }
                                 }
 
->>>>>>> 7753693 (2026 feb 2 2)
                                 await showModalBottomSheet(
                                     isScrollControlled: true,
                                     backgroundColor: Colors.transparent,

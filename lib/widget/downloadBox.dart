@@ -34,12 +34,18 @@ class _DownloadBoxState extends State<DownloadBox> {
   var percent = 0.0, prevPercent = 0.0;
   late Function prevListenFunction;
   final maxData = 240;
-  var downloadCount = 0, timeOutSeconds = 60 * 1, idlePeriondSeconds = 10;
+  var countFile= 0;
+  var modelId = 0,
+      downloadCount = 0,
+      timeOutSeconds = 60 * 1,
+      idlePeriondSeconds = 10;
   Timer? timer;
 
   idlePerioodChecker() async {
     while (percent < 1.0) {
       await Future.delayed(const Duration(seconds: 1));
+
+      if(percent >= 1.0) Navigator.pop(context);
 
       if (percent == prevPercent) {
         if (idlePeriondSeconds > 0) {
@@ -60,6 +66,8 @@ class _DownloadBoxState extends State<DownloadBox> {
         startTimeOut();
       }
     }
+
+    Navigator.pop(context);
   }
 
   startTimeOut() {
@@ -81,7 +89,7 @@ class _DownloadBoxState extends State<DownloadBox> {
   }
 
   sendCommand() {
-    widget.bluetoothController.write("{“cmd”:”MEMGet”}");
+    widget.bluetoothController.write("{\"cmd\":\"MEMGet\"}");
   }
 
   setBleListend() {
@@ -92,18 +100,25 @@ class _DownloadBoxState extends State<DownloadBox> {
       if (r != null) {
         if (widget.edc.processedJson[r.time] == null) return;
 
-        if (widget.edc.processedJson[r.time]!.length == 2) {
-          final modelId = widget.emc.max + 1;
-          final dataId = widget.edc.max + 1;
+        // final modelId = widget.emc.max + 1;
 
+        // print(r.toString());
+
+        final dataId = widget.edc.max + 1;
+        
+
+        if (widget.edc.processedJson[r.time]!.length == 2) {
+          
           percent = (++downloadCount) / maxData;
 
+          
           await widget.ejc.add(EepromJsonFileDataModel(
+              modelId: modelId,
               dataId: dataId,
               fileName: "",
               content:
                   "${widget.edc.processedJson[r.time]![0]}\n\n${widget.edc.processedJson[r.time]![1]}",
-              time: r.time));
+              time: r.time), countFile++);
 
           widget.edc.processedJson[r.time]!.clear();
 
@@ -113,24 +128,16 @@ class _DownloadBoxState extends State<DownloadBox> {
             }
           });
 
-          await widget.edc.addProcessedData(r, modelId, dataId);
+          
+        }
+
+        await widget.edc.addProcessedData(r, modelId, dataId);
 
           widget.edc.count().then((c) {
             if (c > 240) {
               widget.edc.deleteFirst();
             }
-          });
-
-          await widget.emc.add(EepromModel(
-              id: modelId,
-              time: DateTime.now().toUtc().millisecondsSinceEpoch));
-
-          widget.emc.count().then((c) {
-            if (c > 25) {
-              widget.emc.deleteFirst();
-            }
-          });
-        }
+          }); 
       }
 
       if (mounted) {
@@ -143,6 +150,17 @@ class _DownloadBoxState extends State<DownloadBox> {
   void initState() {
     // TODO: implement initState
     super.initState();
+
+    modelId = widget.emc.lastId + 1;
+
+    widget.emc.add(EepromModel(
+        id: modelId, time: DateTime.now().toUtc().millisecondsSinceEpoch));
+
+    widget.emc.count().then((c) {
+      if (c > 25) {
+        widget.emc.deleteFirst();
+      }
+    });
 
     prevListenFunction = widget.bluetoothController.listenFunction ?? (data) {};
     setBleListend();
@@ -179,7 +197,7 @@ class _DownloadBoxState extends State<DownloadBox> {
         child: Center(
           child: Container(
             width: lWidth * 0.95,
-            height: lHeight * (idlePeriondSeconds ==0 ? 0.15 : 0.10),
+            height: lHeight * (idlePeriondSeconds == 0 ? 0.15 : 0.10),
             padding: const EdgeInsets.all(10),
             decoration: BoxDecoration(
               borderRadius: BorderRadius.circular(10),
@@ -198,48 +216,56 @@ class _DownloadBoxState extends State<DownloadBox> {
                             MainStyle.primaryColor, 13),
                       ),
                       Text(
-                        "${(percent * 100).toStringAsFixed(0)}%",
+                        "${(percent * 100).toStringAsFixed(2)}%",
                         style: MyTextStyle.defaultFontCustom(
                             MainStyle.primaryColor, 13),
                       )
                     ],
                   ),
                   Stack(
+                    // clipBehavior: Clip.antiAlias,
                     children: [
                       Container(
                         width: lWidth * 0.9,
                         height: 15,
                         decoration: BoxDecoration(
-                          borderRadius: BorderRadius.circular(5),
+                          borderRadius: BorderRadius.circular(20),
                           color: Colors.grey,
                         ),
                       ),
                       AnimatedContainer(
                         duration: const Duration(milliseconds: 500),
-                        width: (lWidth * 0.9) * percent,
+                        width: percent > 0.005 ? (lWidth * 0.9) * percent : 0,
                         height: 15,
                         decoration: BoxDecoration(
-                          borderRadius: BorderRadius.circular(5),
+                          borderRadius: BorderRadius.only(topLeft: Radius.circular(20), bottomLeft: Radius.circular(20),
+                              topRight:
+                                  percent > 0.03? Radius.circular(20) : Radius.zero,
+                              bottomRight:
+                                  percent > 0.03 ? Radius.circular(20) : Radius.zero),
                           color: MainStyle.primaryColor,
                         ),
                       ),
                     ],
                   ),
-                  Visibility(
-                    visible: idlePeriondSeconds == 0,
-                    child:
-                        // MyButton(color: MainStyle.primaryColor, text: "Cancel now", onPressed: ()=>Navigator.pop(context) , textColor: Colors.white)
-                        Container(
-                          width: lWidth,
-                          alignment: Alignment.centerRight,
-                          child: TextButton(
-                              onPressed: () => Navigator.pop(context),
-                              child: Text(
-                                "Cancel now",
-                                style:
-                                    MyTextStyle.defaultFontCustom(Colors.red, 13),
-                              )),
-                        ),
+                  Align(
+                    alignment: Alignment.centerRight,
+                    child: Visibility(
+                      visible: idlePeriondSeconds == 0,
+                      child:
+                          // MyButton(color: MainStyle.primaryColor, text: "Cancel now", onPressed: ()=>Navigator.pop(context) , textColor: Colors.white)
+                          Padding(
+                            padding: const EdgeInsets.only(top: 8.0),
+                            child: SizedBox(height: 40  ,
+                            width: lWidth * 0.3,
+                              child: MyButton(
+                                  color: MainStyle.thirdColor,
+                                  text: "Cancel now",
+                                  onPressed: () => Navigator.pop(context),
+                                  textColor: Colors.white),
+                            ),
+                          ),
+                    ),
                   )
                 ],
               ),

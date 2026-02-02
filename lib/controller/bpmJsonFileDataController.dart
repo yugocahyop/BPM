@@ -34,7 +34,7 @@ class JsonFileDataController {
     currentData.content = "";
   }
 
-  add(JsonFileDataModel f) async {
+  Future<void> add(JsonFileDataModel f) async {
     final file = await db.find(SembastDb2.file,
         finder: Finder(sortOrders: [SortOrder("time", false)]));
     // print(file);
@@ -84,6 +84,8 @@ class JsonFileDataController {
     // print(firstData.first);
     db.delete(Finder(filter: Filter.equals("time", firstData.first["time"])),
         SembastDb2.file);
+
+    await count();
   }
 
   Future<void> deletePrompt(int index, int date, BuildContext context,
@@ -109,6 +111,8 @@ class JsonFileDataController {
       });
       list.removeAt(index);
 
+      await count();
+
       setState();
     }
   }
@@ -128,6 +132,7 @@ class JsonFileDataController {
 
     if (r != null && r) {
       list.clear();
+      max =0;
       setState();
     }
   }

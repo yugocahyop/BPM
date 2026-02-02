@@ -51,8 +51,8 @@ class BPMDataController {
     currentData.time = DateTime.now().toUtc().millisecondsSinceEpoch;
   }
 
-  add(BpmDataModel f) {
-    db.add(f.toJson(), SembastDb2.BPM);
+  Future<void> add(BpmDataModel f) async {
+    await db.add(f.toJson(), SembastDb2.BPM);
   }
 
   Future<void> find(int offset, Function setState) async {
@@ -216,7 +216,7 @@ class BPMDataController {
         .millisecondsSinceEpoch;
   }
 
-  addProcessedData(BpmDataModel d) {
+  Future<void> addProcessedData(BpmDataModel d) async{
     if (processedData.containsKey(d.time)) {
       final p = processedData[d.time];
 
@@ -225,7 +225,7 @@ class BPMDataController {
       p!.systolic = d.systolic ?? p!.systolic;
 
       if (p!.heartRate != null && p!.diastolic != null && p!.systolic != null) {
-        add(p);
+        await add(p);
 
         processedData.remove(d.time);
       }

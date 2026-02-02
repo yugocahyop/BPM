@@ -23,6 +23,7 @@ class EepromJsonFileDataController {
     db = SembastDb2();
 
     currentData = EepromJsonFileDataModel(
+      modelId: -1,
       dataId: -1,
       time: DateTime.now().millisecondsSinceEpoch,
       fileName: "",
@@ -36,29 +37,30 @@ class EepromJsonFileDataController {
     currentData.content = "";
   }
 
-  Future<void> add(EepromJsonFileDataModel f) async {
+  Future<void> add(EepromJsonFileDataModel f, int count) async {
     final file = await db.find(SembastDb2.eepromFile,
         finder: Finder(sortOrders: [SortOrder("time", false)]));
     // print(file);
 
-    final lastNum = file.isEmpty
-        ? 0
-        : int.tryParse((file.last["fileName"] as String)
-                .split("_")
-                .last
-                .split(".")
-                .first) ??
-            0;
+    // final lastNum = file.isEmpty
+    //     ? 0
+    //     : int.tryParse((file.last["fileName"] as String)
+    //             .split("_")
+    //             .last
+    //             .split(".")
+    //             .first) ??
+    //         0;
 
-    f.fileName = "JSON_File_${lastNum + 1}.json";
+    f.fileName = "EEPROM${f.modelId}_File_${count + 1}.json";
 
     await db.add(f.toJson(), SembastDb2.eepromFile);
   }
 
-  Future<void> find(int offset, Function setState) async {
+  Future<void> find(int dataId, int offset, Function setState) async {
     if (offset == 0) list.clear();
     final r = await db.find(SembastDb2.eepromFile,
         finder: Finder(
+            filter: Filter.equals("dataId", dataId),
             offset: offset, limit: 50, sortOrders: [SortOrder("time", false)]));
 
     for (var i = 0; i < r.length; i++) {
@@ -86,6 +88,7 @@ class EepromJsonFileDataController {
     // print(firstData.first);
     db.delete(Finder(filter: Filter.equals("time", firstData.first["time"])),
         SembastDb2.eepromFile);
+    await count();
   }
 
   Future<void> deletePrompt(int index, int date, BuildContext context,
@@ -101,15 +104,22 @@ class EepromJsonFileDataController {
             textButton1: "Yes, delete",
             actionColor: const Color(0xffC73434),
             buttonAction1: () => db.delete(
-                Finder(filter: Filter.equals("time", date)), SembastDb2.eepromFile)));
+                Finder(filter: Filter.equals("time", date)),
+                SembastDb2.eepromFile)));
 
     if (r != null && r) {
       final m = list[index];
       key.currentState!.removeItem(index, (c, a) {
         return FileitemBpm(
-            animation: a, fdm: JsonFileDataModel(content: m.content, fileName: m.fileName, time: m.time), isDelete: isDelete, onDelete: () {});
+            animation: a,
+            fdm: JsonFileDataModel(
+                content: m.content, fileName: m.fileName, time: m.time),
+            isDelete: isDelete,
+            onDelete: () {});
       });
       list.removeAt(index);
+
+      await count();
 
       setState();
     }
@@ -130,7 +140,15 @@ class EepromJsonFileDataController {
 
     if (r != null && r) {
       list.clear();
+      max =0;
       setState();
     }
+  }
+  Future<void> deleteAllNoPrompt(BuildContext context, Function setState) async {
+      db.delete(Finder(), SembastDb2.eepromFile);
+      list.clear();
+      max =0;
+      setState();
+    
   }
 }

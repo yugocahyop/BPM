@@ -4,12 +4,14 @@ part 'bpmEepromJsonFileDataModel.g.dart';
 
 @JsonSerializable()
 class EepromJsonFileDataModel {
+  int modelId;
   int dataId;
   String fileName;
   String content;
   int time;
 
   EepromJsonFileDataModel({
+    required this.modelId,
     required this.dataId,
     required this.fileName,
     required this.content,

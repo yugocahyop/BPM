@@ -44,6 +44,9 @@ class _Page2BpmState extends State<Page2Bpm> {
   void initState() {
     // TODO: implement initState
     super.initState();
+    widget.edc.find(0, () {
+      setState(() {});
+    });
   }
 
   @override
@@ -62,7 +65,7 @@ class _Page2BpmState extends State<Page2Bpm> {
               Stack(
                 children: [
                   AnimatedPositioned(
-                    left: page == 0 ? 0 : boxWidth + 20,
+                    left: page == 0 ? 0 : boxWidth + 5,
                     child: Container(
                       width: boxWidth,
                       height: boxHeight,
@@ -94,7 +97,7 @@ class _Page2BpmState extends State<Page2Bpm> {
                                   weight: FontWeight.bold),
                             )),
                       ),
-                      MainStyle.sizedBoxW20,
+                      MainStyle.sizedBoxW5,
                       SizedBox(
                         width: boxWidth,
                         height: boxHeight,
@@ -123,8 +126,22 @@ class _Page2BpmState extends State<Page2Bpm> {
               DeleteBar(
                   isDeleting: isDeleting,
                   showDelete: showDelete,
-                  onClearAll: () =>
-                      widget.bdc.deleteAll(context, () => setState(() {})),
+                  onClearAll: () {
+                    switch (page.toInt()) {
+                      case 0:
+                        widget.bdc.deleteAll(context, () => setState(() {}));
+                      case 1:
+                        final eDataC = EepromDataController();
+                        final eJsonC = EepromJsonFileDataController();
+
+                        widget.edc.deleteAll(context, () {
+                          eDataC.deleteAllNoPrompt(context, () {});
+                          eJsonC.deleteAllNoPrompt(context, () {});
+
+                          setState(() {});
+                        });
+                    }
+                  },
                   onDeleteCancel: () {
                     setState(() {
                       isDeleting = false;
@@ -143,7 +160,7 @@ class _Page2BpmState extends State<Page2Bpm> {
                       final r = await c.goToDialog(
                           context,
                           DialogboxXirkabit(
-                            buttonNumber: 1,
+                              buttonNumber: 1,
                               buttonWidth: lWidth * 0.5,
                               iconData: Icons.bluetooth,
                               iconSvg: SvgPicture.asset(
@@ -174,7 +191,7 @@ class _Page2BpmState extends State<Page2Bpm> {
                             buttonAction1: () {}));
 
                     if (r) {
-                      c.goToDialog(
+                      await c.goToDialog(
                           context,
                           DownloadBox(
                             emc: widget.edc,
@@ -182,6 +199,9 @@ class _Page2BpmState extends State<Page2Bpm> {
                             ejc: ejc,
                             bluetoothController: widget.bluetoothController,
                           ));
+                      await widget.edc.find(0, () {
+                        setState(() {});
+                      });
                     }
                   })
             ],

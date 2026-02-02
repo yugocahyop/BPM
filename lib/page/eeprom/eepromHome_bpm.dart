@@ -1,5 +1,6 @@
 import 'package:blood_pressure_monitoring/controller/bpmDataController.dart';
 import 'package:blood_pressure_monitoring/controller/bpmEepromDataController.dart';
+import 'package:blood_pressure_monitoring/controller/bpmEepromJsonFileDataController.dart';
 import 'package:blood_pressure_monitoring/controller/bpmEepromModelController.dart';
 import 'package:blood_pressure_monitoring/controller/controller.dart';
 import 'package:blood_pressure_monitoring/model/bpmDataModel.dart';
@@ -32,10 +33,24 @@ class _EepromBpmState extends State<EepromBpm> {
   final pc = PageController();
   final bDdc = BPMDataController();
   final eDataC = EepromDataController();
+  final eJsonC = EepromJsonFileDataController();
 
   @override
   void didUpdateWidget(covariant EepromBpm oldWidget) {
     // TODO: implement didUpdateWidget
+
+    print("didUpdateWidget called ${widget.bdc.list.length} ${pc.page}");
+    // if (oldWidget.bdc.list.length != widget.bdc.list.length) {
+      if(widget.bdc.list.isEmpty){
+
+        if(pc.page ==1.0 ){
+          pc.animateToPage(0,
+              duration: const Duration(milliseconds: 300),
+              curve: Curves.easeIn);
+        }
+      // }
+      
+    }
     super.didUpdateWidget(oldWidget);
   }
 
@@ -43,36 +58,36 @@ class _EepromBpmState extends State<EepromBpm> {
   void initState() {
     // TODO: implement initState
     super.initState();
-    eDataC.list.addAll([
-      EepromDataModel(
-          id: 1,
-          modelId: 1,
-          systolic: 232,
-          diastolic: 22,
-          heartRate: 22,
-          time: DateTime.now().microsecondsSinceEpoch - 1000000),
-      EepromDataModel(
-          id: 2,
-          modelId: 1,
-          systolic: 232,
-          diastolic: 22,
-          heartRate: 22,
-          time: DateTime.now().microsecondsSinceEpoch - 2000000),
-      EepromDataModel(
-          id: 3,
-          modelId: 1,
-          systolic: 232,
-          diastolic: 22,
-          heartRate: 22,
-          time: DateTime.now().microsecondsSinceEpoch - 3000000),
-      EepromDataModel(
-          id: 4,
-          modelId: 1,
-          systolic: 232,
-          diastolic: 22,
-          heartRate: 22,
-          time: DateTime.now().microsecondsSinceEpoch - 4000000),
-    ]);
+    // eDataC.list.addAll([
+    //   EepromDataModel(
+    //       id: 1,
+    //       modelId: 1,
+    //       systolic: 232,
+    //       diastolic: 22,
+    //       heartRate: 22,
+    //       time: DateTime.now().microsecondsSinceEpoch - 1000000),
+    //   EepromDataModel(
+    //       id: 2,
+    //       modelId: 1,
+    //       systolic: 232,
+    //       diastolic: 22,
+    //       heartRate: 22,
+    //       time: DateTime.now().microsecondsSinceEpoch - 2000000),
+    //   EepromDataModel(
+    //       id: 3,
+    //       modelId: 1,
+    //       systolic: 232,
+    //       diastolic: 22,
+    //       heartRate: 22,
+    //       time: DateTime.now().microsecondsSinceEpoch - 3000000),
+    //   EepromDataModel(
+    //       id: 4,
+    //       modelId: 1,
+    //       systolic: 232,
+    //       diastolic: 22,
+    //       heartRate: 22,
+    //       time: DateTime.now().microsecondsSinceEpoch - 4000000),
+    // ]);
   }
 
   @override
@@ -165,19 +180,34 @@ class _EepromBpmState extends State<EepromBpm> {
                             )),
                         itemBuilder: (context, i, animation) => EepromItemBpm(
                           onTap: () {
+                            // bDdc.list.clear();
+                            // bDdc.list.addAll(eDataC.list
+                            //     .where(
+                            //         (e) => e.modelId == widget.bdc.list[i].id)
+                            //     .map((e) => BpmDataModel(
+                            //         systolic: e.systolic,
+                            //         diastolic: e.diastolic,
+                            //         heartRate: e.heartRate,
+                            //         time: e.time))
+                            //     .toList());
+
                             bDdc.list.clear();
-                            bDdc.list.addAll(eDataC.list
-                                .where(
-                                    (e) => e.modelId == widget.bdc.list[i].id)
-                                .map((e) => BpmDataModel(
-                                    systolic: e.systolic,
-                                    diastolic: e.diastolic,
-                                    heartRate: e.heartRate,
-                                    time: e.time))
-                                .toList());
-                            pc.animateToPage(1,
-                                duration: const Duration(milliseconds: 300),
-                                curve: Curves.easeIn);
+                            eDataC.find(widget.bdc.list[i].id, 0, () {
+                              // print("eDataC length ${eDataC.list.length}");
+                              bDdc.list.addAll(eDataC.list
+                                  .map((e) => BpmDataModel(
+                                      systolic: e.systolic,
+                                      diastolic: e.diastolic,
+                                      heartRate: e.heartRate,
+                                      time: e.time))
+                                  .toList());
+                              setState(() {});
+
+                              final c = Controller();
+                              pc.animateToPage(1,
+                                  duration: const Duration(milliseconds: 300),
+                                  curve: Curves.easeIn);
+                            });
                           },
                           isDelete: widget.isDelete,
                           fdm: widget.bdc.list[i],
@@ -195,46 +225,49 @@ class _EepromBpmState extends State<EepromBpm> {
               )
             ],
           ),
-          Expanded(
-            child: Transform.translate(
-              offset: Offset(0, -20),
-              child: Column(
-                children: [
-                  TextButton(
-                      onPressed: () => pc.animateToPage(0,
-                          duration: const Duration(milliseconds: 300),
-                          curve: Curves.easeIn),
-                      child: Row(
-                        children: [
-                          Icon(Icons.arrow_back,
-                              color: MainStyle.primaryColor, size: 30),
-                          MainStyle.sizedBoxW5,
-                          Text(
-                            "Back",
-                            style: MyTextStyle.defaultFontCustom(
-                                MainStyle.primaryColor, 14),
-                          )
-                        ],
-                      )),
-                  Expanded(
-                      child: HistoryBpm(
-                    isDelete: widget.isDelete,
-                    bdc: bDdc,
-                    padding: EdgeInsets.zero,
-                    onTap: () {
+          Transform.translate(
+            offset: Offset(0, -20),
+            child: Column(
+              children: [
+                TextButton(
+                    onPressed: () => pc.animateToPage(0,
+                        duration: const Duration(milliseconds: 300),
+                        curve: Curves.easeIn),
+                    child: Row(
+                      children: [
+                        Icon(Icons.arrow_back,
+                            color: MainStyle.primaryColor, size: 30),
+                        MainStyle.sizedBoxW5,
+                        Text(
+                          "Back",
+                          style: MyTextStyle.defaultFontCustom(
+                              MainStyle.primaryColor, 14),
+                        )
+                      ],
+                    )),
+                Expanded(
+                    child: HistoryBpm(
+                  isRefresh: false,
+                  isDelete: widget.isDelete,
+                  bdc: bDdc,
+                  padding: EdgeInsets.zero,
+                  onTap: (i) {
+                    final r = eJsonC.find(eDataC.list[i].id, 0, () {
+                      setState(() {});
+          
                       final c = Controller();
                       c.cupertinoPageRoute(
                           context,
                           FileContent(
                               jdm: JsonFileDataModel(
-                                  fileName: "fileName",
-                                  content: "content",
-                                  time:
-                                      DateTime.now().millisecondsSinceEpoch)));
-                    },
-                  ))
-                ],
-              ),
+                            fileName: eJsonC.list.first.fileName,
+                            content: eJsonC.list.first.content,
+                            time: eJsonC.list.first.time,
+                          )));
+                    });
+                  },
+                ))
+              ],
             ),
           )
         ],

@@ -2,6 +2,7 @@ import 'dart:convert';
 
 import 'package:blood_pressure_monitoring/model/bpmDataModel.dart';
 import 'package:blood_pressure_monitoring/model/bpmEepromModel.dart';
+import 'package:blood_pressure_monitoring/page/eeprom/widget/eepromItem_bpm.dart';
 import 'package:blood_pressure_monitoring/page/history/widget/historyItem_bpm.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
@@ -19,7 +20,7 @@ class EepromModelController {
   late SembastDb2 db;
   List<EepromModel> list = [];
   bool isDelete = false;
-  int max = 0;
+  int max = 0, lastId = 0;
   String buffer = "";
   int previousIncomplete = 0;
   List<String> completedJson = [];
@@ -31,10 +32,21 @@ class EepromModelController {
     db = SembastDb2();
 
     currentData = EepromModel(
-        id: -1,
-        time: DateTime.now().millisecondsSinceEpoch,
-      );
+      id: -1,
+      time: DateTime.now().millisecondsSinceEpoch,
+    );
+    getLastId();
     count();
+  }
+
+  getLastId() async {
+    await db.wait();
+    final r = await db.find(SembastDb2.eepromBPM,
+        finder: Finder(sortOrders: [SortOrder("id", false)], limit: 1));
+
+    if (r.isNotEmpty) {
+      lastId = r.first["id"] as int;
+    }
   }
 
   void reset() {
@@ -83,6 +95,8 @@ class EepromModelController {
     // print(firstData.first["date"]);
     db.delete(Finder(filter: Filter.equals("time", firstData.first["time"])),
         SembastDb2.eepromBPM);
+
+    await count();
   }
 
   Future<void> deletePrompt(int index, int date, BuildContext context,
@@ -98,13 +112,22 @@ class EepromModelController {
             textButton1: "Yes, delete",
             actionColor: const Color(0xffC73434),
             buttonAction1: () => db.delete(
-                Finder(filter: Filter.equals("time", date)), SembastDb2.eepromBPM)));
+                Finder(filter: Filter.equals("time", date)),
+                SembastDb2.eepromBPM)));
 
     if (r != null && r) {
       final m = list[index];
       key.currentState!.removeItem(index, (c, a) {
-        return Container();    });
+        return EepromItemBpm(
+            animation: a,
+            fdm: m,
+            onTap: () {},
+            isDelete: true,
+            onDelete: () {});
+      });
       list.removeAt(index);
+
+      await count();
 
       setState();
     }
@@ -125,6 +148,7 @@ class EepromModelController {
 
     if (r != null && r) {
       list.clear();
+      max = 0;
       setState();
     }
   }
@@ -132,7 +156,6 @@ class EepromModelController {
   void setCurrentData(EepromModel fm) {
     currentData.id = fm.id;
     currentData.time = fm.time;
-    
   }
 
   void completeJson(String data, int index) {
@@ -194,9 +217,9 @@ class EepromModelController {
       processedJson[time]!.add(processedString);
     }
 
-    if (processedJson[time]!.length > 2 && currentData.time == time) {
-      add(currentData);
-    }
+    // if (processedJson[time]!.length > 2 && currentData.time == time) {
+    //   add(currentData);
+    // }
   }
 
   bool isProcessedJsonComplete(int time) {
@@ -212,7 +235,4 @@ class EepromModelController {
         .toUtc()
         .millisecondsSinceEpoch;
   }
-
-  
-  
 }

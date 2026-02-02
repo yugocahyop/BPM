@@ -1,9 +1,6 @@
 import 'package:blood_pressure_monitoring/model/bpmJsonFileDataModel.dart';
 import 'package:blood_pressure_monitoring/style/textStyle.dart';
-<<<<<<< HEAD
-=======
 import 'package:blood_pressure_monitoring/tools/fileService.dart';
->>>>>>> 7753693 (2026 feb 2 2)
 import 'package:flutter/material.dart';
 
 import '../../../style/mainStyle.dart';
@@ -19,9 +16,10 @@ class FileContent extends StatefulWidget {
 
 class _FileContentState extends State<FileContent> {
   List<String> listContent = [];
-  List<Widget> listTextWidget = [];
+  List<List<Widget>> listTextWidget = [];
 
   final sc = ScrollController();
+  final sc4 = ScrollController();
   final sc2 = ScrollController();
   final sc3 = ScrollController();
   late ScrollController scMain;
@@ -44,6 +42,17 @@ class _FileContentState extends State<FileContent> {
     sc3.jumpTo(sc2.offset);
     sc3.addListener(_sc3Listener);
   }
+  _sc1istener() {
+    sc4.removeListener(_sc4Listener);
+    sc4.jumpTo(sc.offset);
+    sc4.addListener(_sc4Listener);
+  }
+
+  _sc4Listener() {
+    sc.removeListener(_sc1istener);
+    sc.jumpTo(sc4.offset);
+    sc.addListener(_sc1istener);
+  }
 
   @override
   void initState() {
@@ -58,35 +67,62 @@ class _FileContentState extends State<FileContent> {
       maxLengthPixel = listContent[i].length > maxLengthPixel
           ? listContent[i].length
           : maxLengthPixel;
-      listTextWidget.add(Row(
-        children: [
-          SizedBox(
-              width: 25,
-              child: Text(
-                "${i + 1}",
-                textAlign: TextAlign.end,
-                style: MyTextStyle.defaultFontCustom(MainStyle.thirdColor, 13),
-              )),
-          SizedBox(
-              height: 20,
-              child: VerticalDivider(
-                color: MainStyle.thirdColor,
-              )),
-          MainStyle.sizedBoxW5,
-          Text(
-            listContent[i],
-            style: MyTextStyle.defaultFontCustom(MainStyle.thirdColor, 13),
-          )
-        ],
-      ));
+      listTextWidget.add([
+        Row(
+          children: [
+            SizedBox(
+                width: 25,
+                child: Text(
+                  "${i + 1}",
+                  textAlign: TextAlign.end,
+                  style:
+                      MyTextStyle.defaultFontCustom(MainStyle.thirdColor, 13),
+                )),
+            SizedBox(
+                height: 20,
+                child: VerticalDivider(
+                  color: MainStyle.thirdColor,
+                )),
+            MainStyle.sizedBoxW5,
+            Text(
+              listContent[i],
+              style: MyTextStyle.defaultFontCustom(MainStyle.thirdColor, 13),
+            ),
+          ],
+        ),
+        Row(
+          children: [
+            SizedBox(
+                width: 25,
+                child: Text(
+                  "${i + 1}",
+                  textAlign: TextAlign.end,
+                  style:
+                      MyTextStyle.defaultFontCustom(MainStyle.thirdColor, 13),
+                )),
+            SizedBox(
+                height: 20,
+                child: VerticalDivider(
+                  color: MainStyle.thirdColor,
+                )),
+          ],
+        ),
+      ]);
     }
 
-    listTextWidget.add(SizedBox(
-      height: 20,
-    ));
+    listTextWidget.add([
+      SizedBox(
+        height: 20,
+      ),
+      SizedBox(
+        height: 20,
+      ),
+    ]);
 
     sc3.addListener(_sc3Listener);
     sc2.addListener(_sc2Listener);
+    sc.addListener(_sc1istener);
+    sc4.addListener(_sc4Listener);
 
     // print(listContent[0]);
   }
@@ -118,23 +154,6 @@ class _FileContentState extends State<FileContent> {
             SizedBox(
               width: widthLogical,
               child: Row(
-<<<<<<< HEAD
-                children: [
-                  IconButton(
-                      onPressed: () => Navigator.pop(context),
-                      icon: Icon(
-                        Icons.arrow_back,
-                        color: MainStyle.primaryColor,
-                        size: 30,
-                      )),
-                  MainStyle.sizedBoxW10,
-                  Text(
-                    widget.jdm.fileName,
-                    style: MyTextStyle.defaultFontCustom(
-                        MainStyle.thirdColor, 21,
-                        weight: FontWeight.bold),
-                  )
-=======
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
                   Row(
@@ -155,17 +174,16 @@ class _FileContentState extends State<FileContent> {
                       )
                     ],
                   ),
-
                   IconButton(
                       onPressed: () {
-                        saveFileAndNotify(widget.jdm.fileName, widget.jdm.content);
+                        saveFileAndNotify(
+                            widget.jdm.fileName, widget.jdm.content);
                       },
                       icon: Icon(
                         Icons.download,
                         color: MainStyle.primaryColor,
                         size: 30,
                       ))
->>>>>>> 7753693 (2026 feb 2 2)
                 ],
               ),
             ),
@@ -195,13 +213,24 @@ class _FileContentState extends State<FileContent> {
                           child: Column(
                             children: listTextWidget
                                 .map((e) => SizedBox(
-                                      width: maxLengthPixel * 6.4,
-                                      child: e,
-                                    ))
+                                    width: maxLengthPixel * 6.4,
+                                    child: e[0]))
                                 .toList(),
                           ),
                         ),
                       )),
+                ),
+                SingleChildScrollView(
+                  controller: sc4 ,
+                  scrollDirection: Axis.vertical,
+                  child: Column(
+                    children: listTextWidget
+                        .map((e) => Container (
+                          color: Theme.of(context).colorScheme.surface ,
+                            width: 41,
+                            child: e[1]))
+                        .toList(),
+                  ),
                 ),
                 Align(
                   alignment: Alignment.bottomCenter,

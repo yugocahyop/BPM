@@ -56,14 +56,15 @@ class EepromDataController {
   }
 
   Future<void> add(EepromDataModel f) async {
-    await db.add(f.toJson(), SembastDb2.eepromBPM);
+    await db.add(f.toJson(), SembastDb2.eepromDataBPM);
   }
 
-  Future<void> find(int offset, Function setState) async {
+  Future<void> find(modelId, int offset, Function setState) async {
     if (offset == 0) list.clear();
-    final r = await db.find(SembastDb2.eepromBPM,
+    final r = await db.find(SembastDb2.eepromDataBPM,
         finder: Finder(
-            offset: offset, limit: 50, sortOrders: [SortOrder("time", false)]));
+            filter: Filter.equals("modelId", modelId),
+            offset: offset, limit: 240, sortOrders: [SortOrder("time", false)]));
 
     for (var i = 0; i < r.length; i++) {
       final fh = EepromDataModel.fromJson(r[i].value);
@@ -78,16 +79,17 @@ class EepromDataController {
 
   Future<int> count() async {
     await db.wait();
-    max = await db.count(SembastDb2.eepromBPM);
+    max = await db.count(SembastDb2.eepromDataBPM);
     return max;
   }
 
   Future<void> deleteFirst() async {
-    final firstData = await db.find(SembastDb2.eepromBPM,
+    final firstData = await db.find(SembastDb2.eepromDataBPM,
         finder: Finder(sortOrders: [SortOrder("time", true)], limit: 1));
     // print(firstData.first["date"]);
     db.delete(Finder(filter: Filter.equals("time", firstData.first["time"])),
-        SembastDb2.eepromBPM);
+        SembastDb2.eepromDataBPM);
+    await count();
   }
 
   Future<void> deletePrompt(int index, int date, BuildContext context,
@@ -103,7 +105,7 @@ class EepromDataController {
             textButton1: "Yes, delete",
             actionColor: const Color(0xffC73434),
             buttonAction1: () => db.delete(
-                Finder(filter: Filter.equals("time", date)), SembastDb2.eepromBPM)));
+                Finder(filter: Filter.equals("time", date)), SembastDb2.eepromDataBPM)));
 
     if (r != null && r) {
       final m = list[index];
@@ -112,6 +114,8 @@ class EepromDataController {
             animation: a, fdm: BpmDataModel(systolic: m.systolic, diastolic: m.diastolic , heartRate: m.heartRate, time: m.time), isDelete: isDelete, onDelete: () {});
       });
       list.removeAt(index);
+      
+      await count();
 
       setState();
     }
@@ -128,12 +132,20 @@ class EepromDataController {
             subtitle: "you will not be able to recover them afterwards.",
             textButton1: "Yes, delete",
             actionColor: const Color(0xffC73434),
-            buttonAction1: () => db.delete(Finder(), SembastDb2.eepromBPM)));
+            buttonAction1: () => db.delete(Finder(), SembastDb2.eepromDataBPM)));
 
     if (r != null && r) {
       list.clear();
       setState();
+      max =0;
     }
+  }
+  Future<void> deleteAllNoPrompt(BuildContext context, Function setState) async {
+      db.delete(Finder(), SembastDb2.eepromDataBPM);
+      list.clear();
+      max =0;
+      setState();
+    
   }
 
   void setCurrentData(EepromDataModel fm) {

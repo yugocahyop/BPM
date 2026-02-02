@@ -30,7 +30,7 @@ class DeleteBar extends StatelessWidget {
                       child: Text(
                         "Clear All",
                         style: MyTextStyle.defaultFontCustom(
-                            const Color(0xffC73434), 15,
+                            const Color(0xffC73434), 13,
                             weight: FontWeight.bold),
                       )),
                   TextButton(
@@ -38,7 +38,7 @@ class DeleteBar extends StatelessWidget {
                       child: Text(
                         "Cancel",
                         style: MyTextStyle.defaultFontCustom(
-                            MainStyle.thirdColor, 15,
+                            MainStyle.thirdColor, 13,
                             weight: FontWeight.bold),
                       ))
                 ],

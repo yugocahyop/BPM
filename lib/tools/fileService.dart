@@ -29,7 +29,7 @@ Future<void> saveFileAndNotify(String fileName, String content) async {
       throw Exception("Could not get the downloads directory");
     }
 
-    final file = File('${directory}/$fileName.json');
+    final file = File('${directory}/$fileName');
 
     // Write the file
     await file.writeAsString(content);
@@ -37,7 +37,7 @@ Future<void> saveFileAndNotify(String fileName, String content) async {
     // Show a local notification upon completion
     await NotificationService.showNotification(
       'Save Completed',
-      '$fileName.json has been saved on download folder.',
+      '$fileName has been saved on download folder.',
       payload: file.path, // Pass the file path in the payload
     );
 

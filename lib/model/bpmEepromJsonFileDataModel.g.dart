@@ -9,6 +9,7 @@ part of 'bpmEepromJsonFileDataModel.dart';
 EepromJsonFileDataModel _$EepromJsonFileDataModelFromJson(
         Map<String, dynamic> json) =>
     EepromJsonFileDataModel(
+      modelId: (json['modelId'] as num).toInt(),
       dataId: (json['dataId'] as num).toInt(),
       fileName: json['fileName'] as String,
       content: json['content'] as String,
@@ -18,6 +19,7 @@ EepromJsonFileDataModel _$EepromJsonFileDataModelFromJson(
 Map<String, dynamic> _$EepromJsonFileDataModelToJson(
         EepromJsonFileDataModel instance) =>
     <String, dynamic>{
+      'modelId': instance.modelId,
       'dataId': instance.dataId,
       'fileName': instance.fileName,
       'content': instance.content,

@@ -18,10 +18,7 @@ class HistoryitemBpm extends StatelessWidget {
   BpmDataModel fdm;
   bool isDelete;
   Function onDelete;
-<<<<<<< HEAD
-=======
 
->>>>>>> 7753693 (2026 feb 2 2)
   Animation<double> animation;
 
   DateFormat df = DateFormat("HH:mm dd/MM/yyyy");
@@ -43,15 +40,10 @@ class HistoryitemBpm extends StatelessWidget {
             child: Row(
               mainAxisAlignment: MainAxisAlignment.spaceAround,
               children: [
-<<<<<<< HEAD
-                SizedBox(
-                  width: lWidth * 0.23,
-=======
                 MainStyle.sizedBoxW5,
                 SizedBox(
                   width: lWidth * 0.23,
                   // padding: const EdgeInsets.only(left: 3.0),
->>>>>>> 7753693 (2026 feb 2 2)
                   child: Text(
                     df.format(DateTime.fromMillisecondsSinceEpoch(
                       fdm.time,
@@ -75,11 +67,7 @@ class HistoryitemBpm extends StatelessWidget {
                   ),
                 ),
                 SizedBox(
-<<<<<<< HEAD
-                  width: lWidth * 0.23,
-=======
                   width: lWidth * 0.20,
->>>>>>> 7753693 (2026 feb 2 2)
                   child: Text("${fdm.diastolic} mmHg",
                       style: MyTextStyle.defaultFontCustom(
                           MainStyle.thirdColor, 13,

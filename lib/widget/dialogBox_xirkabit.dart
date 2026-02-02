@@ -61,6 +61,7 @@ class DialogboxXirkabit extends StatelessWidget {
                 color: Colors.white,
                 child: Text(
                   title,
+                  textAlign: TextAlign.center,
                   style: MyTextStyle.defaultFontCustom(Colors.black, 15,
                       weight: FontWeight.w600),
                 ),

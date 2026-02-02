@@ -20,6 +20,12 @@ class EepromDataModel {
     required this.time,
   });
 
+  @override
+  String toString() {
+    // TODO: implement toString
+    return 'EepromDataModel{id: $id, modelId: $modelId, systolic: $systolic, diastolic: $diastolic, heartRate: $heartRate, time: $time}';  
+  }
+
   factory EepromDataModel.fromJson(Map<String, dynamic> json) =>
       _$EepromDataModelFromJson(json);
 
