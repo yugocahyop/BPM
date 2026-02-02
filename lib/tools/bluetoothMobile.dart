@@ -41,9 +41,16 @@ class BluetoothLeMobile {
         BluetoothAdapterState.on;
   }
 
-  enableBluetooth() {
+  Future<void> enableBluetooth() async  {
     if (Platform.isAndroid) {
-      FlutterBluePlus.turnOn();
+      try {
+        await FlutterBluePlus.turnOn();
+      } catch (e) {
+        if (kDebugMode) {
+          print(e);
+        }
+      }
+      //  FlutterBluePlus.turnOn();
     }
   }
 

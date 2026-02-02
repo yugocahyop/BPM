@@ -1,0 +1,20 @@
+{
+  "buildFiles": [
+    "/home/printer/flutter/packages/flutter_tools/gradle/src/main/scripts/CMakeLists.txt"
+  ],
+  "cleanCommandsComponents": [
+    [
+      "/home/printer/Android/Sdk/cmake/3.22.1/bin/ninja",
+      "-C",
+      "/home/printer/Documents/kerjaan/BPM/android/app/property(org.gradle.api.file.Directory, fixed(class org.gradle.api.internal.file.DefaultFilePropertyFactory$FixedDirectory, /home/printer/Documents/kerjaan/BPM/build))/.cxx/debug/694f1j1t/armeabi-v7a",
+      "clean"
+    ]
+  ],
+  "buildTargetsCommandComponents": [
+    "/home/printer/Android/Sdk/cmake/3.22.1/bin/ninja",
+    "-C",
+    "/home/printer/Documents/kerjaan/BPM/android/app/property(org.gradle.api.file.Directory, fixed(class org.gradle.api.internal.file.DefaultFilePropertyFactory$FixedDirectory, /home/printer/Documents/kerjaan/BPM/build))/.cxx/debug/694f1j1t/armeabi-v7a",
+    "{LIST_OF_TARGETS_TO_BUILD}"
+  ],
+  "libraries": {}
+}

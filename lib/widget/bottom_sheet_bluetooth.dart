@@ -25,30 +25,33 @@ class _Bottom_sheet_bluetoothState extends State<Bottom_sheet_bluetooth>
   late AnimationController lottie_controller;
 
   checkOn() async {
-    final isOn = await widget.bluetooth_controller.checkBluetoothOn();
+    // final isOn = await widget.bluetooth_controller.checkBluetoothOn();
+    final lWidth = MediaQuery.of(context).size.width;
+    // final lHeight = MediaQuery.of(context).size.height;
 
-    if (!isOn) {
-      Navigator.pop(context);
+    // if (!isOn) {
+    //   Navigator.pop(context);
 
-      final c = Controller();
-      await c.goToDialog(
-          context,
-          DialogboxXirkabit(
-              iconData: Icons.bluetooth,
-              iconBackgroundColor: MainStyle.primaryColor,
-              title: "Bluetooth Not Enabled!",
-              subtitle: "Please enable bluetooth to continue.",
-              textButton1: "Enable",
-              buttonAction1: () =>
-                  widget.bluetooth_controller.enableBluetooth()));
+    //   final c = Controller();
+    //   await c.goToDialog(
+    //       context,
+    //       DialogboxXirkabit(
+    //         buttonWidth: lWidth * 0.3,
+    //           iconData: Icons.bluetooth,
+    //           iconBackgroundColor: MainStyle.primaryColor,
+    //           title: "Bluetooth Not Enabled!",
+    //           subtitle: "Please enable bluetooth to continue.",
+    //           textButton1: "Enable",
+    //           buttonAction1: () =>
+    //               widget.bluetooth_controller.enableBluetooth()));
 
-      // widget.bluetooth_controller.StartScan();
+    //   // widget.bluetooth_controller.StartScan();
 
-      // lottie_controller.reset();
-      // lottie_controller
-      //   ..duration = const Duration(seconds: 5)
-      //   ..forward();
-    } else {
+    //   // lottie_controller.reset();
+    //   // lottie_controller
+    //   //   ..duration = const Duration(seconds: 5)
+    //   //   ..forward();
+    // } else {
       if (widget.bluetooth_controller.devices.isEmpty) {
         widget.bluetooth_controller.StartScan();
       }
@@ -58,7 +61,24 @@ class _Bottom_sheet_bluetoothState extends State<Bottom_sheet_bluetooth>
           setState(() {});
         }
       });
-    }
+    // }
+  }
+
+  void rescan() {
+    widget.bluetooth_controller.devices.clear();
+    setState(() {});
+    widget.bluetooth_controller.StartScan();
+
+    lottie_controller.reset();
+    lottie_controller
+      ..duration = const Duration(seconds: 5)
+      ..forward();
+
+    Future.delayed(const Duration(seconds: 5), () {
+      if (mounted) {
+        setState(() {});
+      }
+    });
   }
 
   void rescan() {

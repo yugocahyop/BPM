@@ -1,0 +1,4 @@
+#Wed Jan 28 18:08:52 WIB 2026
+base.0=/home/printer/Documents/kerjaan/BPM/android/app/property(org.gradle.api.file.Directory, fixed(class org.gradle.api.internal.file.DefaultFilePropertyFactory$FixedDirectory, /home/printer/Documents/kerjaan/BPM/build))/app/intermediates/dex/release/minifyReleaseWithR8/classes.dex
+renamed.0=classes.dex
+path.0=classes.dex

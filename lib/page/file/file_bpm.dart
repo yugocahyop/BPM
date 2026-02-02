@@ -1,12 +1,23 @@
 import 'package:blood_pressure_monitoring/controller/bpmDataController.dart';
+<<<<<<< HEAD
 import 'package:blood_pressure_monitoring/controller/bpmJsonFileDataController%20copy.dart';
+=======
+import 'package:blood_pressure_monitoring/controller/bpmJsonFileDataController.dart';
+>>>>>>> 7753693 (2026 feb 2 2)
 import 'package:blood_pressure_monitoring/controller/controller.dart';
 import 'package:blood_pressure_monitoring/page/file/widget/fileItemContent_bpm.dart';
 import 'package:blood_pressure_monitoring/page/file/widget/fileItem_bpm.dart';
 import 'package:blood_pressure_monitoring/page/file/widget/fileTitle_bpm.dart';
+<<<<<<< HEAD
 import 'package:blood_pressure_monitoring/page/history/widget/deleteBar_bpm.dart';
 import 'package:blood_pressure_monitoring/page/history/widget/historyItem_bpm.dart';
 import 'package:blood_pressure_monitoring/page/history/widget/historyTitle_bpm.dart';
+=======
+import 'package:blood_pressure_monitoring/page/page2/widget/deleteBar_bpm.dart';
+import 'package:blood_pressure_monitoring/page/history/widget/historyItem_bpm.dart';
+import 'package:blood_pressure_monitoring/page/history/widget/historyTitle_bpm.dart';
+import 'package:blood_pressure_monitoring/widget/downloadBox.dart';
+>>>>>>> 7753693 (2026 feb 2 2)
 import 'package:flutter/material.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:flutter_svg/svg.dart';
@@ -41,12 +52,28 @@ class _FileBpmState extends State<FileBpm> {
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
+<<<<<<< HEAD
               Text(
                 "File",
                 style: MyTextStyle.defaultFontCustom(MainStyle.thirdColor, 21,
                     weight: FontWeight.bold),
               ),
               DeleteBar(
+=======
+              Padding(
+                padding: const EdgeInsets.only(left: 20.0),
+                child: Text(
+                  "File",
+                  style: MyTextStyle.defaultFontCustom(MainStyle.thirdColor, 21,
+                      weight: FontWeight.bold),
+                ),
+              ),
+              DeleteBar(
+                  onDownloadTap: (){
+                    // final c = Controller();
+                    // c.cupertinoPageRoute(context, DownloadBox(edc: widget.fdc.edc), bdc);
+                  },
+>>>>>>> 7753693 (2026 feb 2 2)
                   isDeleting: isDeleting,
                   showDelete: showDelete,
                   onClearAll: () =>

@@ -112,14 +112,16 @@ class Controller {
       Map<perm.Permission, perm.PermissionStatus> statuses = await [
         perm.Permission.bluetoothScan,
         perm.Permission.bluetoothConnect,
-        // perm.Permission.storage,
+        perm.Permission.storage,
         perm.Permission.location,
+        perm.Permission.notification,
       ].request();
     } else {
       Map<perm.Permission, perm.PermissionStatus> statuses = await [
         perm.Permission.bluetooth,
-        // perm.Permission.storage,
+        perm.Permission.storage,
         perm.Permission.location,
+        perm.Permission.notification,
       ].request();
     }
   }

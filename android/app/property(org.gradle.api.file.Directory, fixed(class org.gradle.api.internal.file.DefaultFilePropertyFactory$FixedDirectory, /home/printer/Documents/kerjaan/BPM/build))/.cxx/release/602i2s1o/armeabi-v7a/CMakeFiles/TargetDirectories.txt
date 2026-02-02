@@ -1,0 +1,2 @@
+/home/printer/Documents/kerjaan/BPM/android/app/property(org.gradle.api.file.Directory, fixed(class org.gradle.api.internal.file.DefaultFilePropertyFactory$FixedDirectory, /home/printer/Documents/kerjaan/BPM/build))/.cxx/release/602i2s1o/armeabi-v7a/CMakeFiles/edit_cache.dir
+/home/printer/Documents/kerjaan/BPM/android/app/property(org.gradle.api.file.Directory, fixed(class org.gradle.api.internal.file.DefaultFilePropertyFactory$FixedDirectory, /home/printer/Documents/kerjaan/BPM/build))/.cxx/release/602i2s1o/armeabi-v7a/CMakeFiles/rebuild_cache.dir

@@ -7,9 +7,9 @@ part of 'bpmDataModel.dart';
 // **************************************************************************
 
 BpmDataModel _$BpmDataModelFromJson(Map<String, dynamic> json) => BpmDataModel(
-      systolic: (json['systolic'] as num).toInt(),
-      diastolic: (json['diastolic'] as num).toInt(),
-      heartRate: (json['heartRate'] as num).toInt(),
+      systolic: (json['systolic'] as num?)?.toInt(),
+      diastolic: (json['diastolic'] as num?)?.toInt(),
+      heartRate: (json['heartRate'] as num?)?.toInt(),
       time: (json['time'] as num).toInt(),
     );
 

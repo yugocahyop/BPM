@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
+import 'package:flutter_svg/svg.dart';
 
 import '../style/mainStyle.dart';
 import '../style/textStyle.dart';
@@ -8,23 +9,29 @@ import 'myButton.dart';
 class DialogboxXirkabit extends StatelessWidget {
   DialogboxXirkabit(
       {super.key,
+      this.buttonNumber = 2,
       required this.iconData,
       required this.iconBackgroundColor,
       required this.title,
       required this.subtitle,
       required this.textButton1,
       required this.buttonAction1,
+      this.buttonWidth,
+      this.iconSvg,
       this.actionColor = MainStyle.primaryColor,
       this.cancelColor = const Color(0xffA8AE9C)});
 
   IconData iconData;
   Color iconBackgroundColor;
+  SvgPicture? iconSvg;
   String title;
   String subtitle;
   String textButton1;
   Function buttonAction1;
   Color cancelColor;
   Color actionColor;
+  int buttonNumber;
+  double? buttonWidth;
 
   @override
   Widget build(BuildContext context) {
@@ -45,7 +52,7 @@ class DialogboxXirkabit extends StatelessWidget {
                   padding: EdgeInsets.all(3),
                   decoration: BoxDecoration(
                       shape: BoxShape.circle, color: iconBackgroundColor),
-                  child: Icon(
+                  child: iconSvg ?? Icon(
                     iconData,
                     color: Colors.white,
                   )),
@@ -84,20 +91,33 @@ class DialogboxXirkabit extends StatelessWidget {
                 child: Row(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
-                    MyButton(
-                        color: cancelColor,
-                        text: "Cancel",
-                        onPressed: () => Navigator.pop(context, false),
-                        textColor: Colors.white),
-                    MainStyle.sizedBoxW20,
-                    MyButton(
-                        color: actionColor,
-                        text: textButton1,
-                        onPressed: () {
-                          Navigator.pop(context, true);
-                          buttonAction1();
-                        },
-                        textColor: Colors.white),
+                    Visibility(
+                      visible: buttonNumber == 2,
+                      child: Row(
+                        children: [
+                          SizedBox(
+                            width: buttonWidth,
+                            child: MyButton(
+                                color: cancelColor,
+                                text: "Cancel",
+                                onPressed: () => Navigator.pop(context, false),
+                                textColor: Colors.white),
+                          ),
+                          MainStyle.sizedBoxW20,
+                        ],
+                      ),
+                    ),
+                    SizedBox(
+                      width: buttonWidth,
+                      child: MyButton(
+                          color: actionColor,
+                          text: textButton1,
+                          onPressed: () {
+                            Navigator.pop(context, true);
+                            buttonAction1();
+                          },
+                          textColor: Colors.white),
+                    ),
                   ],
                 ),
               )

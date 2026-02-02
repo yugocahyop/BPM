@@ -1,5 +1,9 @@
 import 'package:blood_pressure_monitoring/model/bpmJsonFileDataModel.dart';
 import 'package:blood_pressure_monitoring/style/textStyle.dart';
+<<<<<<< HEAD
+=======
+import 'package:blood_pressure_monitoring/tools/fileService.dart';
+>>>>>>> 7753693 (2026 feb 2 2)
 import 'package:flutter/material.dart';
 
 import '../../../style/mainStyle.dart';
@@ -114,6 +118,7 @@ class _FileContentState extends State<FileContent> {
             SizedBox(
               width: widthLogical,
               child: Row(
+<<<<<<< HEAD
                 children: [
                   IconButton(
                       onPressed: () => Navigator.pop(context),
@@ -129,6 +134,38 @@ class _FileContentState extends State<FileContent> {
                         MainStyle.thirdColor, 21,
                         weight: FontWeight.bold),
                   )
+=======
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  Row(
+                    children: [
+                      IconButton(
+                          onPressed: () => Navigator.pop(context),
+                          icon: Icon(
+                            Icons.arrow_back,
+                            color: MainStyle.primaryColor,
+                            size: 30,
+                          )),
+                      MainStyle.sizedBoxW10,
+                      Text(
+                        widget.jdm.fileName,
+                        style: MyTextStyle.defaultFontCustom(
+                            MainStyle.thirdColor, 21,
+                            weight: FontWeight.bold),
+                      )
+                    ],
+                  ),
+
+                  IconButton(
+                      onPressed: () {
+                        saveFileAndNotify(widget.jdm.fileName, widget.jdm.content);
+                      },
+                      icon: Icon(
+                        Icons.download,
+                        color: MainStyle.primaryColor,
+                        size: 30,
+                      ))
+>>>>>>> 7753693 (2026 feb 2 2)
                 ],
               ),
             ),

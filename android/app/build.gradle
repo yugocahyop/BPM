@@ -25,10 +25,18 @@ if (flutterVersionName == null) {
 
 android {
     namespace = "com.example.blood_pressure_monitoring"
-    compileSdk = flutter.compileSdkVersion
-    ndkVersion = flutter.ndkVersion
+    // compileSdk = flutter.compileSdkVersion
+    compileSdk = 35
+    // ndkVersion = flutter.ndkVersion
+    ndkVersion = "26.1.10909125"
+    
+    defaultConfig {
+        multiDexEnabled true
+    }
+
 
     compileOptions {
+        coreLibraryDesugaringEnabled = true
         sourceCompatibility = JavaVersion.VERSION_1_8
         targetCompatibility = JavaVersion.VERSION_1_8
     }
@@ -50,7 +58,11 @@ android {
             // Signing with the debug keys for now, so `flutter run --release` works.
             signingConfig = signingConfigs.debug
         }
+    } 
+    dependencies {
+        coreLibraryDesugaring 'com.android.tools:desugar_jdk_libs:2.1.4'
     }
+
 }
 
 flutter {

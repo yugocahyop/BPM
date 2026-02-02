@@ -1,0 +1,218 @@
+1<?xml version="1.0" encoding="utf-8"?>
+2<manifest xmlns:android="http://schemas.android.com/apk/res/android"
+3    package="com.xirka.blood_pressure_monitoring"
+4    android:versionCode="1"
+5    android:versionName="1.0.0" >
+6
+7    <uses-sdk
+8        android:minSdkVersion="24"
+9        android:targetSdkVersion="36" />
+10
+11    <uses-permission android:name="android.permission.BLUETOOTH_SCAN" />
+11-->/home/printer/Documents/kerjaan/BPM/android/app/src/main/AndroidManifest.xml:2:4-71
+11-->/home/printer/Documents/kerjaan/BPM/android/app/src/main/AndroidManifest.xml:2:21-69
+12    <uses-permission android:name="android.permission.BLUETOOTH_CONNECT" />
+12-->/home/printer/Documents/kerjaan/BPM/android/app/src/main/AndroidManifest.xml:3:1-72
+12-->/home/printer/Documents/kerjaan/BPM/android/app/src/main/AndroidManifest.xml:3:18-69
+13    <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
+13-->/home/printer/Documents/kerjaan/BPM/android/app/src/main/AndroidManifest.xml:4:1-75
+13-->/home/printer/Documents/kerjaan/BPM/android/app/src/main/AndroidManifest.xml:4:18-72
+14
+15    <!-- legacy for Android 11 or lower -->
+16    <uses-permission
+16-->/home/printer/Documents/kerjaan/BPM/android/app/src/main/AndroidManifest.xml:7:1-91
+17        android:name="android.permission.BLUETOOTH"
+17-->/home/printer/Documents/kerjaan/BPM/android/app/src/main/AndroidManifest.xml:7:18-61
+18        android:maxSdkVersion="30" />
+18-->/home/printer/Documents/kerjaan/BPM/android/app/src/main/AndroidManifest.xml:7:62-88
+19    <uses-permission
+19-->/home/printer/Documents/kerjaan/BPM/android/app/src/main/AndroidManifest.xml:8:1-97
+20        android:name="android.permission.BLUETOOTH_ADMIN"
+20-->/home/printer/Documents/kerjaan/BPM/android/app/src/main/AndroidManifest.xml:8:18-67
+21        android:maxSdkVersion="30" />
+21-->/home/printer/Documents/kerjaan/BPM/android/app/src/main/AndroidManifest.xml:8:68-94
+22
+23    <!-- legacy for Android 9 or lower -->
+24    <uses-permission
+24-->/home/printer/Documents/kerjaan/BPM/android/app/src/main/AndroidManifest.xml:11:1-104
+25        android:name="android.permission.ACCESS_COARSE_LOCATION"
+25-->/home/printer/Documents/kerjaan/BPM/android/app/src/main/AndroidManifest.xml:11:18-74
+26        android:maxSdkVersion="28" />
+26-->/home/printer/Documents/kerjaan/BPM/android/app/src/main/AndroidManifest.xml:11:75-101
+27    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
+27-->/home/printer/Documents/kerjaan/BPM/android/app/src/main/AndroidManifest.xml:12:1-76
+27-->/home/printer/Documents/kerjaan/BPM/android/app/src/main/AndroidManifest.xml:12:18-73
+28    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
+28-->/home/printer/Documents/kerjaan/BPM/android/app/src/main/AndroidManifest.xml:13:1-76
+28-->/home/printer/Documents/kerjaan/BPM/android/app/src/main/AndroidManifest.xml:13:18-74
+29    <!--
+30         Required to query activities that can process text, see:
+31         https://developer.android.com/training/package-visibility and
+32         https://developer.android.com/reference/android/content/Intent#ACTION_PROCESS_TEXT.
+33
+34         In particular, this is used by the Flutter engine in io.flutter.plugin.text.ProcessTextPlugin.
+35    -->
+36    <queries>
+36-->/home/printer/Documents/kerjaan/BPM/android/app/src/main/AndroidManifest.xml:51:5-56:15
+37        <intent>
+37-->/home/printer/Documents/kerjaan/BPM/android/app/src/main/AndroidManifest.xml:52:9-55:18
+38            <action android:name="android.intent.action.PROCESS_TEXT" />
+38-->/home/printer/Documents/kerjaan/BPM/android/app/src/main/AndroidManifest.xml:53:13-72
+38-->/home/printer/Documents/kerjaan/BPM/android/app/src/main/AndroidManifest.xml:53:21-70
+39
+40            <data android:mimeType="text/plain" />
+40-->/home/printer/Documents/kerjaan/BPM/android/app/src/main/AndroidManifest.xml:54:13-50
+40-->/home/printer/Documents/kerjaan/BPM/android/app/src/main/AndroidManifest.xml:54:19-48
+41        </intent>
+42    </queries>
+43
+44    <permission
+44-->[androidx.core:core:1.13.1] /home/printer/.gradle/caches/8.14/transforms/22701eb366af0ba49816bb478711e35c/transformed/core-1.13.1/AndroidManifest.xml:22:5-24:47
+45        android:name="com.xirka.blood_pressure_monitoring.DYNAMIC_RECEIVER_NOT_EXPORTED_PERMISSION"
+45-->[androidx.core:core:1.13.1] /home/printer/.gradle/caches/8.14/transforms/22701eb366af0ba49816bb478711e35c/transformed/core-1.13.1/AndroidManifest.xml:23:9-81
+46        android:protectionLevel="signature" />
+46-->[androidx.core:core:1.13.1] /home/printer/.gradle/caches/8.14/transforms/22701eb366af0ba49816bb478711e35c/transformed/core-1.13.1/AndroidManifest.xml:24:9-44
+47
+48    <uses-permission android:name="com.xirka.blood_pressure_monitoring.DYNAMIC_RECEIVER_NOT_EXPORTED_PERMISSION" />
+48-->[androidx.core:core:1.13.1] /home/printer/.gradle/caches/8.14/transforms/22701eb366af0ba49816bb478711e35c/transformed/core-1.13.1/AndroidManifest.xml:26:5-97
+48-->[androidx.core:core:1.13.1] /home/printer/.gradle/caches/8.14/transforms/22701eb366af0ba49816bb478711e35c/transformed/core-1.13.1/AndroidManifest.xml:26:22-94
+49
+50    <application
+51        android:name="android.app.Application"
+51-->/home/printer/Documents/kerjaan/BPM/android/app/src/main/AndroidManifest.xml:16:9-42
+52        android:appComponentFactory="androidx.core.app.CoreComponentFactory"
+52-->[androidx.core:core:1.13.1] /home/printer/.gradle/caches/8.14/transforms/22701eb366af0ba49816bb478711e35c/transformed/core-1.13.1/AndroidManifest.xml:28:18-86
+53        android:extractNativeLibs="false"
+54        android:icon="@mipmap/ic_launcher"
+54-->/home/printer/Documents/kerjaan/BPM/android/app/src/main/AndroidManifest.xml:17:9-43
+55        android:label="Blood Pressure Monitoring" >
+55-->/home/printer/Documents/kerjaan/BPM/android/app/src/main/AndroidManifest.xml:15:9-50
+56        <activity
+56-->/home/printer/Documents/kerjaan/BPM/android/app/src/main/AndroidManifest.xml:18:9-39:20
+57            android:name="com.example.blood_pressure_monitoring.MainActivity"
+57-->/home/printer/Documents/kerjaan/BPM/android/app/src/main/AndroidManifest.xml:19:13-41
+58            android:configChanges="orientation|keyboardHidden|keyboard|screenSize|smallestScreenSize|locale|layoutDirection|fontScale|screenLayout|density|uiMode"
+58-->/home/printer/Documents/kerjaan/BPM/android/app/src/main/AndroidManifest.xml:24:13-163
+59            android:exported="true"
+59-->/home/printer/Documents/kerjaan/BPM/android/app/src/main/AndroidManifest.xml:20:13-36
+60            android:hardwareAccelerated="true"
+60-->/home/printer/Documents/kerjaan/BPM/android/app/src/main/AndroidManifest.xml:25:13-47
+61            android:launchMode="singleTop"
+61-->/home/printer/Documents/kerjaan/BPM/android/app/src/main/AndroidManifest.xml:21:13-43
+62            android:taskAffinity=""
+62-->/home/printer/Documents/kerjaan/BPM/android/app/src/main/AndroidManifest.xml:22:13-36
+63            android:theme="@style/LaunchTheme"
+63-->/home/printer/Documents/kerjaan/BPM/android/app/src/main/AndroidManifest.xml:23:13-47
+64            android:windowSoftInputMode="adjustResize" >
+64-->/home/printer/Documents/kerjaan/BPM/android/app/src/main/AndroidManifest.xml:26:13-55
+65
+66            <!--
+67                 Specifies an Android theme to apply to this Activity as soon as
+68                 the Android process has started. This theme is visible to the user
+69                 while the Flutter UI initializes. After that, this theme continues
+70                 to determine the Window background behind the Flutter UI.
+71            -->
+72            <meta-data
+72-->/home/printer/Documents/kerjaan/BPM/android/app/src/main/AndroidManifest.xml:31:13-34:17
+73                android:name="io.flutter.embedding.android.NormalTheme"
+73-->/home/printer/Documents/kerjaan/BPM/android/app/src/main/AndroidManifest.xml:32:15-70
+74                android:resource="@style/NormalTheme" />
+74-->/home/printer/Documents/kerjaan/BPM/android/app/src/main/AndroidManifest.xml:33:15-52
+75
+76            <intent-filter>
+76-->/home/printer/Documents/kerjaan/BPM/android/app/src/main/AndroidManifest.xml:35:13-38:29
+77                <action android:name="android.intent.action.MAIN" />
+77-->/home/printer/Documents/kerjaan/BPM/android/app/src/main/AndroidManifest.xml:36:17-68
+77-->/home/printer/Documents/kerjaan/BPM/android/app/src/main/AndroidManifest.xml:36:25-66
+78
+79                <category android:name="android.intent.category.LAUNCHER" />
+79-->/home/printer/Documents/kerjaan/BPM/android/app/src/main/AndroidManifest.xml:37:17-76
+79-->/home/printer/Documents/kerjaan/BPM/android/app/src/main/AndroidManifest.xml:37:27-74
+80            </intent-filter>
+81        </activity>
+82        <!--
+83             Don't delete the meta-data below.
+84             This is used by the Flutter tool to generate GeneratedPluginRegistrant.java
+85        -->
+86        <meta-data
+86-->/home/printer/Documents/kerjaan/BPM/android/app/src/main/AndroidManifest.xml:42:9-44:33
+87            android:name="flutterEmbedding"
+87-->/home/printer/Documents/kerjaan/BPM/android/app/src/main/AndroidManifest.xml:43:13-44
+88            android:value="2" />
+88-->/home/printer/Documents/kerjaan/BPM/android/app/src/main/AndroidManifest.xml:44:13-30
+89
+90        <uses-library
+90-->[androidx.window:window:1.2.0] /home/printer/.gradle/caches/8.14/transforms/95b601bb2b741ffeec4dd131a5275aed/transformed/jetified-window-1.2.0/AndroidManifest.xml:23:9-25:40
+91            android:name="androidx.window.extensions"
+91-->[androidx.window:window:1.2.0] /home/printer/.gradle/caches/8.14/transforms/95b601bb2b741ffeec4dd131a5275aed/transformed/jetified-window-1.2.0/AndroidManifest.xml:24:13-54
+92            android:required="false" />
+92-->[androidx.window:window:1.2.0] /home/printer/.gradle/caches/8.14/transforms/95b601bb2b741ffeec4dd131a5275aed/transformed/jetified-window-1.2.0/AndroidManifest.xml:25:13-37
+93        <uses-library
+93-->[androidx.window:window:1.2.0] /home/printer/.gradle/caches/8.14/transforms/95b601bb2b741ffeec4dd131a5275aed/transformed/jetified-window-1.2.0/AndroidManifest.xml:26:9-28:40
+94            android:name="androidx.window.sidecar"
+94-->[androidx.window:window:1.2.0] /home/printer/.gradle/caches/8.14/transforms/95b601bb2b741ffeec4dd131a5275aed/transformed/jetified-window-1.2.0/AndroidManifest.xml:27:13-51
+95            android:required="false" />
+95-->[androidx.window:window:1.2.0] /home/printer/.gradle/caches/8.14/transforms/95b601bb2b741ffeec4dd131a5275aed/transformed/jetified-window-1.2.0/AndroidManifest.xml:28:13-37
+96
+97        <provider
+97-->[androidx.lifecycle:lifecycle-process:2.7.0] /home/printer/.gradle/caches/8.14/transforms/0da9f39a2a73fd273c8008f85a960ee5/transformed/jetified-lifecycle-process-2.7.0/AndroidManifest.xml:24:9-32:20
+98            android:name="androidx.startup.InitializationProvider"
+98-->[androidx.lifecycle:lifecycle-process:2.7.0] /home/printer/.gradle/caches/8.14/transforms/0da9f39a2a73fd273c8008f85a960ee5/transformed/jetified-lifecycle-process-2.7.0/AndroidManifest.xml:25:13-67
+99            android:authorities="com.xirka.blood_pressure_monitoring.androidx-startup"
+99-->[androidx.lifecycle:lifecycle-process:2.7.0] /home/printer/.gradle/caches/8.14/transforms/0da9f39a2a73fd273c8008f85a960ee5/transformed/jetified-lifecycle-process-2.7.0/AndroidManifest.xml:26:13-68
+100            android:exported="false" >
+100-->[androidx.lifecycle:lifecycle-process:2.7.0] /home/printer/.gradle/caches/8.14/transforms/0da9f39a2a73fd273c8008f85a960ee5/transformed/jetified-lifecycle-process-2.7.0/AndroidManifest.xml:27:13-37
+101            <meta-data
+101-->[androidx.lifecycle:lifecycle-process:2.7.0] /home/printer/.gradle/caches/8.14/transforms/0da9f39a2a73fd273c8008f85a960ee5/transformed/jetified-lifecycle-process-2.7.0/AndroidManifest.xml:29:13-31:52
+102                android:name="androidx.lifecycle.ProcessLifecycleInitializer"
+102-->[androidx.lifecycle:lifecycle-process:2.7.0] /home/printer/.gradle/caches/8.14/transforms/0da9f39a2a73fd273c8008f85a960ee5/transformed/jetified-lifecycle-process-2.7.0/AndroidManifest.xml:30:17-78
+103                android:value="androidx.startup" />
+103-->[androidx.lifecycle:lifecycle-process:2.7.0] /home/printer/.gradle/caches/8.14/transforms/0da9f39a2a73fd273c8008f85a960ee5/transformed/jetified-lifecycle-process-2.7.0/AndroidManifest.xml:31:17-49
+104            <meta-data
+104-->[androidx.profileinstaller:profileinstaller:1.3.1] /home/printer/.gradle/caches/8.14/transforms/0928d8d05e10e98ae4df4cf21a771c90/transformed/jetified-profileinstaller-1.3.1/AndroidManifest.xml:29:13-31:52
+105                android:name="androidx.profileinstaller.ProfileInstallerInitializer"
+105-->[androidx.profileinstaller:profileinstaller:1.3.1] /home/printer/.gradle/caches/8.14/transforms/0928d8d05e10e98ae4df4cf21a771c90/transformed/jetified-profileinstaller-1.3.1/AndroidManifest.xml:30:17-85
+106                android:value="androidx.startup" />
+106-->[androidx.profileinstaller:profileinstaller:1.3.1] /home/printer/.gradle/caches/8.14/transforms/0928d8d05e10e98ae4df4cf21a771c90/transformed/jetified-profileinstaller-1.3.1/AndroidManifest.xml:31:17-49
+107        </provider>
+108
+109        <receiver
+109-->[androidx.profileinstaller:profileinstaller:1.3.1] /home/printer/.gradle/caches/8.14/transforms/0928d8d05e10e98ae4df4cf21a771c90/transformed/jetified-profileinstaller-1.3.1/AndroidManifest.xml:34:9-52:20
+110            android:name="androidx.profileinstaller.ProfileInstallReceiver"
+110-->[androidx.profileinstaller:profileinstaller:1.3.1] /home/printer/.gradle/caches/8.14/transforms/0928d8d05e10e98ae4df4cf21a771c90/transformed/jetified-profileinstaller-1.3.1/AndroidManifest.xml:35:13-76
+111            android:directBootAware="false"
+111-->[androidx.profileinstaller:profileinstaller:1.3.1] /home/printer/.gradle/caches/8.14/transforms/0928d8d05e10e98ae4df4cf21a771c90/transformed/jetified-profileinstaller-1.3.1/AndroidManifest.xml:36:13-44
+112            android:enabled="true"
+112-->[androidx.profileinstaller:profileinstaller:1.3.1] /home/printer/.gradle/caches/8.14/transforms/0928d8d05e10e98ae4df4cf21a771c90/transformed/jetified-profileinstaller-1.3.1/AndroidManifest.xml:37:13-35
+113            android:exported="true"
+113-->[androidx.profileinstaller:profileinstaller:1.3.1] /home/printer/.gradle/caches/8.14/transforms/0928d8d05e10e98ae4df4cf21a771c90/transformed/jetified-profileinstaller-1.3.1/AndroidManifest.xml:38:13-36
+114            android:permission="android.permission.DUMP" >
+114-->[androidx.profileinstaller:profileinstaller:1.3.1] /home/printer/.gradle/caches/8.14/transforms/0928d8d05e10e98ae4df4cf21a771c90/transformed/jetified-profileinstaller-1.3.1/AndroidManifest.xml:39:13-57
+115            <intent-filter>
+115-->[androidx.profileinstaller:profileinstaller:1.3.1] /home/printer/.gradle/caches/8.14/transforms/0928d8d05e10e98ae4df4cf21a771c90/transformed/jetified-profileinstaller-1.3.1/AndroidManifest.xml:40:13-42:29
+116                <action android:name="androidx.profileinstaller.action.INSTALL_PROFILE" />
+116-->[androidx.profileinstaller:profileinstaller:1.3.1] /home/printer/.gradle/caches/8.14/transforms/0928d8d05e10e98ae4df4cf21a771c90/transformed/jetified-profileinstaller-1.3.1/AndroidManifest.xml:41:17-91
+116-->[androidx.profileinstaller:profileinstaller:1.3.1] /home/printer/.gradle/caches/8.14/transforms/0928d8d05e10e98ae4df4cf21a771c90/transformed/jetified-profileinstaller-1.3.1/AndroidManifest.xml:41:25-88
+117            </intent-filter>
+118            <intent-filter>
+118-->[androidx.profileinstaller:profileinstaller:1.3.1] /home/printer/.gradle/caches/8.14/transforms/0928d8d05e10e98ae4df4cf21a771c90/transformed/jetified-profileinstaller-1.3.1/AndroidManifest.xml:43:13-45:29
+119                <action android:name="androidx.profileinstaller.action.SKIP_FILE" />
+119-->[androidx.profileinstaller:profileinstaller:1.3.1] /home/printer/.gradle/caches/8.14/transforms/0928d8d05e10e98ae4df4cf21a771c90/transformed/jetified-profileinstaller-1.3.1/AndroidManifest.xml:44:17-85
+119-->[androidx.profileinstaller:profileinstaller:1.3.1] /home/printer/.gradle/caches/8.14/transforms/0928d8d05e10e98ae4df4cf21a771c90/transformed/jetified-profileinstaller-1.3.1/AndroidManifest.xml:44:25-82
+120            </intent-filter>
+121            <intent-filter>
+121-->[androidx.profileinstaller:profileinstaller:1.3.1] /home/printer/.gradle/caches/8.14/transforms/0928d8d05e10e98ae4df4cf21a771c90/transformed/jetified-profileinstaller-1.3.1/AndroidManifest.xml:46:13-48:29
+122                <action android:name="androidx.profileinstaller.action.SAVE_PROFILE" />
+122-->[androidx.profileinstaller:profileinstaller:1.3.1] /home/printer/.gradle/caches/8.14/transforms/0928d8d05e10e98ae4df4cf21a771c90/transformed/jetified-profileinstaller-1.3.1/AndroidManifest.xml:47:17-88
+122-->[androidx.profileinstaller:profileinstaller:1.3.1] /home/printer/.gradle/caches/8.14/transforms/0928d8d05e10e98ae4df4cf21a771c90/transformed/jetified-profileinstaller-1.3.1/AndroidManifest.xml:47:25-85
+123            </intent-filter>
+124            <intent-filter>
+124-->[androidx.profileinstaller:profileinstaller:1.3.1] /home/printer/.gradle/caches/8.14/transforms/0928d8d05e10e98ae4df4cf21a771c90/transformed/jetified-profileinstaller-1.3.1/AndroidManifest.xml:49:13-51:29
+125                <action android:name="androidx.profileinstaller.action.BENCHMARK_OPERATION" />
+125-->[androidx.profileinstaller:profileinstaller:1.3.1] /home/printer/.gradle/caches/8.14/transforms/0928d8d05e10e98ae4df4cf21a771c90/transformed/jetified-profileinstaller-1.3.1/AndroidManifest.xml:50:17-95
+125-->[androidx.profileinstaller:profileinstaller:1.3.1] /home/printer/.gradle/caches/8.14/transforms/0928d8d05e10e98ae4df4cf21a771c90/transformed/jetified-profileinstaller-1.3.1/AndroidManifest.xml:50:25-92
+126            </intent-filter>
+127        </receiver>
+128    </application>
+129
+130</manifest>
