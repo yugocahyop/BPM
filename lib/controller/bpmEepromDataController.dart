@@ -77,19 +77,19 @@ class EepromDataController {
     setState();
   }
 
-  Future<int> count() async {
+  Future<int> count({Filter? filter}) async {
     await db.wait();
-    max = await db.count(SembastDb2.eepromDataBPM);
+    max = await db.count(SembastDb2.eepromDataBPM, finder: Finder(filter: filter));
     return max;
   }
 
-  Future<void> deleteFirst() async {
+  Future<void> deleteFirst({Filter? filter}) async {
     final firstData = await db.find(SembastDb2.eepromDataBPM,
-        finder: Finder(sortOrders: [SortOrder("time", true)], limit: 1));
+        finder: Finder(sortOrders: [SortOrder("time", true)], limit: 1, filter: filter));
     // print(firstData.first["date"]);
     db.delete(Finder(filter: Filter.equals("time", firstData.first["time"])),
         SembastDb2.eepromDataBPM);
-    await count();
+    await count(filter: filter);
   }
 
   Future<void> deletePrompt(int index, int date, BuildContext context,

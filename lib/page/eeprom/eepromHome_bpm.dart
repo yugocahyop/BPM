@@ -32,14 +32,16 @@ class _EepromBpmState extends State<EepromBpm> {
   final keyAnimatedList = GlobalKey<AnimatedListState>();
   final pc = PageController();
   final bDdc = BPMDataController();
-  final eDataC = EepromDataController();
-  final eJsonC = EepromJsonFileDataController();
+  var eDataC = EepromDataController();
+  var eJsonC = EepromJsonFileDataController();
 
   @override
   void didUpdateWidget(covariant EepromBpm oldWidget) {
     // TODO: implement didUpdateWidget
+    eDataC= EepromDataController();
+    eJsonC= EepromJsonFileDataController();
 
-    print("didUpdateWidget called ${widget.bdc.list.length} ${pc.page}");
+    // print("didUpdateWidget called ${widget.bdc.list.length} ${pc.page}");
     // if (oldWidget.bdc.list.length != widget.bdc.list.length) {
       if(widget.bdc.list.isEmpty){
 
@@ -188,12 +190,13 @@ class _EepromBpmState extends State<EepromBpm> {
                             //         systolic: e.systolic,
                             //         diastolic: e.diastolic,
                             //         heartRate: e.heartRate,
-                            //         time: e.time))
+                            //         time: e.time)) 
                             //     .toList());
 
                             bDdc.list.clear();
+                            // print("eDataC model id ${widget.bdc.list[i].id}");
                             eDataC.find(widget.bdc.list[i].id, 0, () {
-                              // print("eDataC length ${eDataC.list.length}");
+                              
                               bDdc.list.addAll(eDataC.list
                                   .map((e) => BpmDataModel(
                                       systolic: e.systolic,

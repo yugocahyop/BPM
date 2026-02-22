@@ -7,6 +7,7 @@ import 'package:blood_pressure_monitoring/model/bpmEepromJsonFileDataModel.dart'
 import 'package:blood_pressure_monitoring/model/bpmEepromModel.dart';
 import 'package:blood_pressure_monitoring/tools/bluetoothMobile.dart';
 import 'package:flutter/material.dart';
+import 'package:sembast/sembast.dart';
 import '../style/mainStyle.dart';
 import '../style/textStyle.dart';
 import 'myButton.dart';
@@ -34,7 +35,7 @@ class _DownloadBoxState extends State<DownloadBox> {
   var percent = 0.0, prevPercent = 0.0;
   late Function prevListenFunction;
   final maxData = 240;
-  var countFile= 0;
+  var countFile = 0;
   var modelId = 0,
       downloadCount = 0,
       timeOutSeconds = 60 * 1,
@@ -45,7 +46,7 @@ class _DownloadBoxState extends State<DownloadBox> {
     while (percent < 1.0) {
       await Future.delayed(const Duration(seconds: 1));
 
-      if(percent >= 1.0) Navigator.pop(context);
+      if (percent >= 1.0 && mounted) Navigator.pop(context);
 
       if (percent == prevPercent) {
         if (idlePeriondSeconds > 0) {
@@ -67,7 +68,7 @@ class _DownloadBoxState extends State<DownloadBox> {
       }
     }
 
-    Navigator.pop(context);
+    if (mounted) Navigator.pop(context);
   }
 
   startTimeOut() {
@@ -105,39 +106,36 @@ class _DownloadBoxState extends State<DownloadBox> {
         // print(r.toString());
 
         final dataId = widget.edc.max + 1;
-        
 
         if (widget.edc.processedJson[r.time]!.length == 2) {
-          
           percent = (++downloadCount) / maxData;
 
-          
-          await widget.ejc.add(EepromJsonFileDataModel(
-              modelId: modelId,
-              dataId: dataId,
-              fileName: "",
-              content:
-                  "${widget.edc.processedJson[r.time]![0]}\n\n${widget.edc.processedJson[r.time]![1]}",
-              time: r.time), countFile++);
+          await widget.ejc.add(
+              EepromJsonFileDataModel(
+                  modelId: modelId,
+                  dataId: dataId,
+                  fileName: "",
+                  content:
+                      "${widget.edc.processedJson[r.time]![0]}\n\n${widget.edc.processedJson[r.time]![1]}",
+                  time: r.time),
+              countFile++);
 
           widget.edc.processedJson[r.time]!.clear();
 
-          widget.ejc.count().then((c) {
+          widget.ejc.count(filter: Filter.equals("modelId", modelId)).then((c) {
             if (c >= 240) {
-              widget.ejc.deleteFirst();
+              widget.ejc.deleteFirst(filter: Filter.equals("modelId", modelId));
             }
           });
-
-          
         }
 
         await widget.edc.addProcessedData(r, modelId, dataId);
 
-          widget.edc.count().then((c) {
-            if (c > 240) {
-              widget.edc.deleteFirst();
-            }
-          }); 
+        widget.edc.count(filter: Filter.equals("modelId", modelId)).then((c) {
+          if (c > 240) {
+            widget.edc.deleteFirst(filter: Filter.equals("modelId", modelId));
+          }
+        });
       }
 
       if (mounted) {
@@ -238,11 +236,15 @@ class _DownloadBoxState extends State<DownloadBox> {
                         width: percent > 0.005 ? (lWidth * 0.9) * percent : 0,
                         height: 15,
                         decoration: BoxDecoration(
-                          borderRadius: BorderRadius.only(topLeft: Radius.circular(20), bottomLeft: Radius.circular(20),
-                              topRight:
-                                  percent > 0.03? Radius.circular(20) : Radius.zero,
-                              bottomRight:
-                                  percent > 0.03 ? Radius.circular(20) : Radius.zero),
+                          borderRadius: BorderRadius.only(
+                              topLeft: Radius.circular(20),
+                              bottomLeft: Radius.circular(20),
+                              topRight: percent > 0.03
+                                  ? Radius.circular(20)
+                                  : Radius.zero,
+                              bottomRight: percent > 0.03
+                                  ? Radius.circular(20)
+                                  : Radius.zero),
                           color: MainStyle.primaryColor,
                         ),
                       ),
@@ -255,16 +257,17 @@ class _DownloadBoxState extends State<DownloadBox> {
                       child:
                           // MyButton(color: MainStyle.primaryColor, text: "Cancel now", onPressed: ()=>Navigator.pop(context) , textColor: Colors.white)
                           Padding(
-                            padding: const EdgeInsets.only(top: 8.0),
-                            child: SizedBox(height: 40  ,
-                            width: lWidth * 0.3,
-                              child: MyButton(
-                                  color: MainStyle.thirdColor,
-                                  text: "Cancel now",
-                                  onPressed: () => Navigator.pop(context),
-                                  textColor: Colors.white),
-                            ),
-                          ),
+                        padding: const EdgeInsets.only(top: 8.0),
+                        child: SizedBox(
+                          height: 40,
+                          width: lWidth * 0.3,
+                          child: MyButton(
+                              color: MainStyle.thirdColor,
+                              text: "Cancel now",
+                              onPressed: () => Navigator.pop(context),
+                              textColor: Colors.white),
+                        ),
+                      ),
                     ),
                   )
                 ],

@@ -64,9 +64,12 @@ class EepromModelController {
 
   add(EepromModel f) {
     db.add(f.toJson(), SembastDb2.eepromBPM);
+
+    lastId++;
   }
 
   Future<void> find(int offset, Function setState) async {
+    // await db.wait();
     if (offset == 0) list.clear();
     final r = await db.find(SembastDb2.eepromBPM,
         finder: Finder(
@@ -148,6 +151,7 @@ class EepromModelController {
 
     if (r != null && r) {
       list.clear();
+      lastId = 0;
       max = 0;
       setState();
     }

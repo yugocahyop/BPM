@@ -57,6 +57,7 @@ class EepromJsonFileDataController {
   }
 
   Future<void> find(int dataId, int offset, Function setState) async {
+    // await db.wait();
     if (offset == 0) list.clear();
     final r = await db.find(SembastDb2.eepromFile,
         finder: Finder(
@@ -74,21 +75,21 @@ class EepromJsonFileDataController {
     setState();
   }
 
-  Future<int> count() async {
+  Future<int> count({Filter? filter}) async {
     await db.wait();
-    max = await db.count(SembastDb2.eepromFile);
+    max = await db.count(SembastDb2.eepromFile , finder: Finder(filter: filter));
     // print("count $max");
     return max;
   }
 
-  Future<void> deleteFirst() async {
+  Future<void> deleteFirst({Filter? filter}) async {
     final firstData = await db.find(SembastDb2.eepromFile,
-        finder: Finder(sortOrders: [SortOrder("time", true)], limit: 1));
+        finder: Finder(sortOrders: [SortOrder("time", true)], limit: 1, filter: filter));
     if (firstData.isEmpty) return;
     // print(firstData.first);
     db.delete(Finder(filter: Filter.equals("time", firstData.first["time"])),
         SembastDb2.eepromFile);
-    await count();
+    await count(filter: filter);
   }
 
   Future<void> deletePrompt(int index, int date, BuildContext context,

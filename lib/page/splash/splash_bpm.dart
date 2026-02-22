@@ -76,12 +76,14 @@ class _SplashState extends State<Splash> {
                 children: [
                   Hero(
                     tag: "logo_bpm",
-                    child: SizedBox(
-                      width: widthLogical * 0.5,
-                      child: SvgPicture.asset(
-                        "assets/logo_blop_bpm.svg",
-                        width: widthLogical * 0.5,
-                        fit: BoxFit.fill,
+                    child: Material(
+                      type: MaterialType.transparency,
+                      child: InkWell(
+                        child: SvgPicture.asset(
+                          "assets/logo_blop_bpm.svg",
+                          width: widthLogical * 0.5,
+                          fit: BoxFit.fill,
+                        ),
                       ),
                     ),
                   ),

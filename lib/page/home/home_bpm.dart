@@ -22,7 +22,6 @@ class Home extends StatefulWidget {
   final bluetoothController = BluetoothLeMobile();
   final bdc = BPMDataController();
   final fdc = JsonFileDataController();
-  
 
   @override
   State<Home> createState() => _HomeState();
@@ -63,12 +62,14 @@ class _HomeState extends State<Home> {
           children: [
             Hero(
               tag: "logo_bpm",
-              child: SizedBox(
-                width: widthLogical * 0.3,
-                child: SvgPicture.asset(
-                  "assets/logo_blop_bpm.svg",
-                  width: widthLogical * 0.3,
-                  fit: BoxFit.fill,
+              child: Material(
+                type: MaterialType.transparency,
+                child: InkWell(
+                  child: SvgPicture.asset(
+                    "assets/logo_blop_bpm.svg",
+                    width: widthLogical * 0.3,
+                    fit: BoxFit.fill,
+                  ),
                 ),
               ),
             ),
