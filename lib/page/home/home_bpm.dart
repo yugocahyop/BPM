@@ -37,12 +37,12 @@ class _HomeState extends State<Home> {
     super.initState();
 
     // Globalprovider.setState = setState;
-    widget.edc.list.addAll([
-      EepromModel(id: 1, time: DateTime.now().microsecondsSinceEpoch - 40000),
-      EepromModel(id: 2, time: DateTime.now().microsecondsSinceEpoch - 30000),
-      EepromModel(id: 3, time: DateTime.now().microsecondsSinceEpoch - 20000),
-      EepromModel(id: 4, time: DateTime.now().microsecondsSinceEpoch - 10000),
-    ]);
+    // widget.edc.list.addAll([
+    //   EepromModel(id: 1, time: DateTime.now().microsecondsSinceEpoch - 40000),
+    //   EepromModel(id: 2, time: DateTime.now().microsecondsSinceEpoch - 30000),
+    //   EepromModel(id: 3, time: DateTime.now().microsecondsSinceEpoch - 20000),
+    //   EepromModel(id: 4, time: DateTime.now().microsecondsSinceEpoch - 10000),
+    // ]);
   }
 
   bool isSetup = false;

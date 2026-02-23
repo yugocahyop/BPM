@@ -118,6 +118,10 @@ class _DownloadBoxState extends State<DownloadBox> {
         }
       }
 
+      if(percent >= 1.0) {
+        return;
+      }
+
       final r = widget.edc.processData(dataStr);
 
       if (r != null) {
@@ -144,20 +148,21 @@ class _DownloadBoxState extends State<DownloadBox> {
 
           widget.edc.processedJson[r.time]!.clear();
 
-          widget.ejc.count(filter: Filter.equals("modelId", modelId)).then((c) {
-            if (c >= 240) {
-              widget.ejc.deleteFirst(filter: Filter.equals("modelId", modelId));
-            }
-          });
+          // widget.ejc.count(finder: Finder(filter: Filter.equals("modelId", modelId))).then((c) {
+          //   print("count for modelId $modelId is $c");
+          //   if (c >= 240) {
+          //     widget.ejc.deleteFirst(filter: Filter.equals("modelId", modelId));
+          //   }
+          // });
         }
 
         await widget.edc.addProcessedData(r, modelId, dataId);
 
-        widget.edc.count(filter: Filter.equals("modelId", modelId)).then((c) {
-          if (c > 240) {
-            widget.edc.deleteFirst(filter: Filter.equals("modelId", modelId));
-          }
-        });
+        // widget.edc.count(filter: Filter.equals("modelId", modelId)).then((c) {
+        //   if (c > 240) {
+        //     widget.edc.deleteFirst(filter: Filter.equals("modelId", modelId));
+        //   }
+        // });
       }
 
       if (mounted) {

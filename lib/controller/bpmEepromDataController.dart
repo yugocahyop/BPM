@@ -154,14 +154,29 @@ class EepromDataController {
     currentData.heartRate = fm.heartRate;
   }
 
-  void completeJson(String data, int index) {
+  void completeJson(String data, int index, String newJson) {
     // buffer += data.substring(0, index + 1);
 
-    completedJson.add(
-      "${buffer.substring(buffer.indexOf(
-            "{",
-          )) + data.substring(0, index + 1)}",
-    );
+    if (buffer.isEmpty) {
+      final diff = data.length - newJson.length;
+
+      final completeString = "${newJson.substring(0, (index - diff) + 1)}";
+
+      // print("complete json: $completeString");
+
+    
+      completedJson.add(completeString);
+    } else {
+      final completeString = "${buffer.substring(buffer.indexOf(
+                "{",
+              )) + data.substring(0, index + 1)}";
+
+      // print(
+      //     "complete json: ${completeString.replaceAll("\n", "").replaceAll(" ", "")}");
+
+      
+      completedJson.add(completeString);
+    }
 
     // print("incomplete complete1: $data");
 
@@ -174,6 +189,7 @@ class EepromDataController {
     int bracketLeft = previousBracketNum ?? 0;
     bool isBracketStart = previousBracketNum != null && previousBracketNum > 0;
     String newJson = "";
+     int lastCompleteIndex = 0;
 
     for (var i = 0; i < s.length; i++) {
       if (s[i] == "{") {
@@ -181,7 +197,7 @@ class EepromDataController {
         // print(
         //   "incomplete: ${s[i]}",
         // );
-      } else if (s[i] == "}" && isBracketStart) {
+      } else if (s[i] == "}" && isBracketStart && bracketLeft > 0) {
         bracketLeft--;
         // print(
         //   "incomplete: ${s[i]}",
@@ -193,14 +209,24 @@ class EepromDataController {
       }
 
       if (isBracketStart && bracketLeft == 0) {
-        completeJson(s, i);
-        newJson = s.substring(i + 1);
-
         isBracketStart = false;
+        completeJson(s, i, newJson);
+        newJson = s.substring(i + 1);
+        lastCompleteIndex = i + 1;
+
+        
       }
     }
 
-    if (newJson.isNotEmpty) s = newJson;
+    // if (newJson.isNotEmpty) s = newJson;
+    if(lastCompleteIndex > 0) {
+      s = s.substring(lastCompleteIndex);
+    }
+    
+    if(lastCompleteIndex > 0 && newJson.isNotEmpty) {
+      s = "";
+    }
+
 
     return bracketLeft;
   }
@@ -293,13 +319,9 @@ class EepromDataController {
 
         previousIncomplete = incompleteJsonNum;
 
-        // if (buffer.isEmpty) {
-        //   buffer += decoded.substring(decoded.indexOf(
-        //     "{",
-        //   ));
-        // } else {
+   
         buffer += decoded;
-        // }
+
 
         // print(
         //   "prev incomplete: $previousIncomplete",
@@ -309,13 +331,18 @@ class EepromDataController {
       // print(buffer);
 
       if (completedJson.isNotEmpty) {
-        final processedString = completedJson.removeAt(0);
+        var processedString = completedJson.removeAt(0);
+
+     
+
+       
+        // print("processed String: $processedString"); 
         // print(
         //   "processed Json incomplete: ${processedString.substring(processedString.indexOf(",\n    \"div\" :"), processedString.indexOf("</div>\"\n") + 8)}",
         // );
 
         final replacedStering =
-            processedString.replaceAll(" ", "").replaceAll("\n", "");
+            processedString.replaceAll(" ", "").replaceAll("\n", "").replaceAll("{\"resp\":\"alldatasent\"}", "");
         Map<String, dynamic> json =
             jsonDecode(replacedStering.indexOf(",\"div\":") == -1
                 ? processedString
@@ -329,6 +356,10 @@ class EepromDataController {
         // print(
         //   "processed Json incomplete2: $json",
         // );
+
+        // if(json.containsKey("resp")) {
+        //   return null;
+        // }
 
         if (json.containsKey("component")) {
           currentData.systolic = json["component"][0]["valueQuantity"]["value"];
@@ -347,7 +378,7 @@ class EepromDataController {
               diastolic: currentData.diastolic,
               systolic: currentData.systolic,
               heartRate: null);
-        } else {
+        } else if (json.containsKey("valueQuantity") && json.containsKey("effectiveDateTime")) {
           currentData.heartRate = json["valueQuantity"]["value"];
           String timeString = (json["effectiveDateTime"] as String);
           int time = getTimeInMillisecondUtc(timeString);
