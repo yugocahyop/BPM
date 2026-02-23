@@ -1,4 +1,5 @@
 import 'dart:async';
+import 'dart:convert';
 
 import 'package:blood_pressure_monitoring/controller/bpmEepromDataController.dart';
 import 'package:blood_pressure_monitoring/controller/bpmEepromJsonFileDataController.dart';
@@ -34,19 +35,20 @@ class _DownloadBoxState extends State<DownloadBox> {
   var msg = "Downloading data...";
   var percent = 0.0, prevPercent = 0.0;
   late Function prevListenFunction;
-  final maxData = 240;
+  var maxData = 240;
   var countFile = 0;
   var modelId = 0,
       downloadCount = 0,
       timeOutSeconds = 60 * 1,
       idlePeriondSeconds = 10;
   Timer? timer;
+  bool countReply = false;
 
   idlePerioodChecker() async {
     while (percent < 1.0) {
       await Future.delayed(const Duration(seconds: 1));
 
-      if (percent >= 1.0 && mounted) Navigator.pop(context);
+      // if (percent >= 1.0 && mounted) Navigator.pop(context);
 
       if (percent == prevPercent) {
         if (idlePeriondSeconds > 0) {
@@ -68,7 +70,7 @@ class _DownloadBoxState extends State<DownloadBox> {
       }
     }
 
-    if (mounted) Navigator.pop(context);
+    // if (mounted) Navigator.pop(context);
   }
 
   startTimeOut() {
@@ -96,7 +98,27 @@ class _DownloadBoxState extends State<DownloadBox> {
   setBleListend() {
     widget.bluetoothController.setListenFunction((data) async {
       idlePeriondSeconds = 10;
-      final r = widget.edc.processData(data);
+
+       if (data.contains(0)) {
+        final dataClean = data.getRange(0, data.indexOf(0)).toList();
+        data = dataClean;
+      }
+
+      final dataStr = utf8.decode(data, allowMalformed: true);
+
+      if(!countReply) {
+        // final dataStr = utf8.decode(data, allowMalformed: true);
+        if(dataStr.contains("\"count\"")) {
+          final json = jsonDecode(dataStr);
+          maxData = json["count"] ?? maxData;
+          countReply = true;
+
+          // print("maxData changed to $maxData");
+          return;
+        }
+      }
+
+      final r = widget.edc.processData(dataStr);
 
       if (r != null) {
         if (widget.edc.processedJson[r.time] == null) return;
@@ -141,6 +163,8 @@ class _DownloadBoxState extends State<DownloadBox> {
       if (mounted) {
         setState(() {});
       }
+
+      if(percent >= 1.0 && mounted) Future.delayed(const Duration(milliseconds: 2000), () => Navigator.pop(context));
     });
   }
 

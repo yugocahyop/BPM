@@ -256,15 +256,15 @@ class EepromDataController {
     processedData.putIfAbsent(d.time, () => d);
   }
 
-  EepromDataModel? processData(List<int> data) {
+  EepromDataModel? processData(String decoded) {
     // print(data);
     try {
-      if (data.contains(0)) {
-        final dataClean = data.getRange(0, data.indexOf(0)).toList();
-        data = dataClean;
-      }
+      // if (data.contains(0)) {
+      //   final dataClean = data.getRange(0, data.indexOf(0)).toList();
+      //   data = dataClean;
+      // }
 
-      final decoded = utf8.decode(data, allowMalformed: true);
+      // final decoded = utf8.decode(data, allowMalformed: true);
       // print(
       //   "incomplete: $decoded",
       // );

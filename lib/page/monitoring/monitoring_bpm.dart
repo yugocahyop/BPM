@@ -104,9 +104,12 @@ class _MonitoringState extends State<Monitoring> {
         padding: const EdgeInsets.only(left: 8, top: 0, right: 8),
         child: Column(
           children: [
-            SvgPicture.asset(
-              "assets/logo_blop_bpm.svg",
-              width: widthLogical * 0.3,
+            Hero(
+              tag: "logo_bpm",
+              child: SvgPicture.asset(
+                "assets/logo_blop_bpm.svg",
+                width: widthLogical * 0.3,
+              ),
             ),
             // MainStyle.sizedBoxH10,
             Text(

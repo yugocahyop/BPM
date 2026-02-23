@@ -22,7 +22,7 @@ class BluetoothLeMobile {
   int mtu = 250;
   Function(List<int> data)? listenFunction;
 
-  void setListenFunction(f(dynamic data)) {
+  void setListenFunction(f(List<int> data)) {
     listenFunction = (List<int> data) {
       f(data);
     };

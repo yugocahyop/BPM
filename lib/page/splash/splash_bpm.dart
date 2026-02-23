@@ -36,6 +36,10 @@ class _SplashState extends State<Splash> {
   void initState() {
     super.initState();
 
+    SystemChrome.setSystemUIOverlayStyle(
+        const SystemUiOverlayStyle(statusBarColor: Colors.transparent, systemNavigationBarColor: Colors.black, systemNavigationBarIconBrightness: Brightness.light, systemNavigationBarContrastEnforced: true));
+        
+
     WakelockPlus.enable();
 
     NotificationService.onNotificationTapped = (payload) {
@@ -65,9 +69,17 @@ class _SplashState extends State<Splash> {
         height: heightLogical,
         child: Column(
           children: [
-            SvgPicture.asset(
-              "assets/topSplash_bpm.svg",
-              width: widthLogical,
+            Hero(
+              tag: "topSplash",
+              child: Material(
+                type: MaterialType.transparency,
+                child: InkWell(
+                  child: SvgPicture.asset(
+                    "assets/topSplash_bpm.svg",
+                    width: widthLogical,
+                  ),
+                ),
+              ),
             ),
             Expanded(
               child: Column(
@@ -103,10 +115,18 @@ class _SplashState extends State<Splash> {
                 ],
               ),
             ),
-            SvgPicture.asset(
-              "assets/bottomSplash_bpm.svg",
-              width: widthLogical,
-              fit: BoxFit.fill,
+            Hero(
+              tag: "bottomSplash",
+              child: Material(
+                type: MaterialType.transparency,
+                child: InkWell(
+                  child: SvgPicture.asset(
+                    "assets/bottomSplash_bpm.svg",
+                    width: widthLogical,
+                    fit: BoxFit.fill,
+                  ),
+                ),
+              ),
             ),
           ],
         ),

@@ -136,6 +136,8 @@ class Controller {
       ));
     } else {
       SystemChrome.setSystemUIOverlayStyle(SystemUiOverlayStyle(
+          // systemNavigationBarColor: Colors.black,
+          systemNavigationBarIconBrightness: Brightness.dark,
           statusBarColor: MainStyle.whiteColor,
           statusBarIconBrightness: Brightness.dark));
     }
@@ -170,7 +172,7 @@ class Controller {
         context,
         CupertinoPageRoute(
             settings: RouteSettings(name: name ?? ""),
-            maintainState: false,
+            maintainState: true,
             fullscreenDialog: false,
             builder: (BuildContext context) {
               return w;

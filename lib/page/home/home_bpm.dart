@@ -54,79 +54,107 @@ class _HomeState extends State<Home> {
 
     // Globalprovider.of(context)!.show("test");
 
-    return Scaffold(
-      body: SizedBox(
-        width: widthLogical,
-        height: heightLogical,
-        child: Stack(
-          children: [
-            Hero(
-              tag: "logo_bpm",
-              child: Material(
-                type: MaterialType.transparency,
-                child: InkWell(
-                  child: SvgPicture.asset(
-                    "assets/logo_blop_bpm.svg",
-                    width: widthLogical * 0.3,
-                    fit: BoxFit.fill,
-                  ),
-                ),
-              ),
-            ),
-            Column(
-              children: [
-                Container(
-                  width: widthLogical,
-                  height: heightLogical * 0.1,
-                  decoration: const BoxDecoration(
-                    color: MainStyle.primaryColor,
-                    borderRadius:
-                        BorderRadius.vertical(bottom: Radius.circular(20)),
-                  ),
-                ),
-                Expanded(
-                    child: PageView(
-                  controller: pc,
-                  physics: NeverScrollableScrollPhysics(),
-                  children: [
-                    Monitoring(
-                      fdc: widget.fdc,
-                      bdc: widget.bdc,
-                      bluetoothController: widget.bluetoothController,
+    return PopScope(
+      canPop: false,
+      onPopInvoked: (didPop) {
+        if(didPop) return;
+      },
+      child: Scaffold(
+        body: SizedBox(
+          width: widthLogical,
+          height: heightLogical,
+          child: Stack(
+            children: [
+
+              Align(
+                alignment: Alignment.topCenter,
+                child: Hero(
+                tag: "topSplash",
+                child: Transform.translate(
+                  offset: const Offset(0, -100),
+                  child: Opacity(
+                    opacity: 0,
+                    child: SvgPicture.asset(
+                      "assets/topSplash_bpm.svg",
+                      width: widthLogical,
                     ),
-                    Page2Bpm(
+                  ),
+                ),
+                            ),
+              ),
+
+              Align(
+                alignment: Alignment.bottomCenter,
+                child: Hero(
+                tag: "bottomSplash",
+                child: Transform.translate(
+                  offset: const Offset(0, 130),
+                  child: Opacity(
+                    opacity: 0,
+                    child: SvgPicture.asset(
+                      "assets/bottomSplash_bpm.svg",
+                      width: widthLogical,
+                      fit: BoxFit.fill,
+                    ),
+                  ),
+                ),
+                            ),
+              ),
+              Column(
+                children: [
+                  Container(
+                    width: widthLogical,
+                    height: heightLogical * 0.1,
+                    decoration: const BoxDecoration(
+                      color: MainStyle.primaryColor,
+                      borderRadius:
+                          BorderRadius.vertical(bottom: Radius.circular(20)),
+                    ),
+                  ),
+                  Expanded(
+                      child: PageView(
+                    controller: pc,
+                    physics: NeverScrollableScrollPhysics(),
+                    children: [
+                      Monitoring(
+                        fdc: widget.fdc,
                         bdc: widget.bdc,
-                        edc: widget.edc,
-                        bluetoothController: widget.bluetoothController),
-                    FileBpm(fdc: widget.fdc)
-                  ],
-                )),
-                BottomNav(
-                  page: page,
-                  onClick: (page1) {
-                    // print(page1);
-                    if (page1 == 1) {
-                      widget.bdc.find(0, () => setState(() {}));
-                    } else if (page1 == 2) {
-                      widget.fdc.find(0, () => setState(() {}));
-                    }
-                    pc.animateToPage(page1,
-                        duration: const Duration(milliseconds: 300),
-                        curve: Curves.ease);
-                    setState(() {
-                      page = page1;
-                    });
-                  },
-                )
-              ],
-            ),
-            InfoNotif(
-              isOk: Globalprovider.of(context)!.isOk,
-              infoText: Globalprovider.of(context)!.infoText,
-              showInfo: Globalprovider.of(context)!.showNotif,
-              visibilityInfo: Globalprovider.of(context)!.visibilityNotif,
-            )
-          ],
+                        bluetoothController: widget.bluetoothController,
+                      ),
+                      Page2Bpm(
+                          bdc: widget.bdc,
+                          edc: widget.edc,
+                          bluetoothController: widget.bluetoothController),
+                      FileBpm(fdc: widget.fdc)
+                    ],
+                  )),
+                  BottomNav(
+                    page: page,
+                    onClick: (page1) {
+                      // print(page1);
+                      if (page1 == 1) {
+                        widget.bdc.find(0, () => setState(() {}));
+                      } else if (page1 == 2) {
+                        widget.fdc.find(0, () => setState(() {}));
+                      }
+                      pc.animateToPage(page1,
+                          duration: const Duration(milliseconds: 300),
+                          curve: Curves.ease);
+                      setState(() {
+                        page = page1;
+                      });
+                    },
+                  )
+                ],
+              ),
+              InfoNotif(
+                isOk: Globalprovider.of(context)!.isOk,
+                infoText: Globalprovider.of(context)!.infoText,
+                showInfo: Globalprovider.of(context)!.showNotif,
+                visibilityInfo: Globalprovider.of(context)!.visibilityNotif,
+              )
+            ],
+          ),
         ),
       ),
     );

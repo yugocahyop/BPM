@@ -1,12 +1,13 @@
 import 'package:blood_pressure_monitoring/global/globalProvider.dart';
 import 'package:blood_pressure_monitoring/navigation/myNavigation.dart';
+import 'package:blood_pressure_monitoring/page/home/home_bpm.dart';
 import 'package:blood_pressure_monitoring/page/splash/splash_bpm.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 
 void main() {
   SystemChrome.setSystemUIOverlayStyle(
-        const SystemUiOverlayStyle(statusBarColor: Colors.transparent));
+        const SystemUiOverlayStyle(statusBarColor: Colors.transparent, systemNavigationBarIconBrightness: Brightness.dark, systemNavigationBarContrastEnforced: true, systemNavigationBarColor: Colors.white));
         
   runApp(const MyApp());
 
@@ -19,35 +20,37 @@ class MyApp extends StatelessWidget {
   // This widget is the root of your application.
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
-      title: 'Blood Pressure Monitoring',
-      theme: ThemeData(
-        // This is the theme of your application.
-        //
-        // TRY THIS: Try running your application with "flutter run". You'll see
-        // the application has a purple toolbar. Then, without quitting the app,
-        // try changing the seedColor in the colorScheme below to Colors.green
-        // and then invoke "hot reload" (save your changes or press the "hot
-        // reload" button in a Flutter-supported IDE, or press "r" if you used
-        // the command line to start the app).
-        //
-        // Notice that the counter didn't reset back to zero; the application
-        // state is not lost during the reload. To reset the state, use hot
-        // restart instead.
-        //
-        // This works for code too, not just values: Most code changes can be
-        // tested with just a hot reload.
-        colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple),
-        useMaterial3: true,
+    return Globalprovider(
+      child: MaterialApp(
+        title: 'Blood Pressure Monitoring',
+        theme: ThemeData(
+          // This is the theme of your application.
+          //
+          // TRY THIS: Try running your application with "flutter run". You'll see
+          // the application has a purple toolbar. Then, without quitting the app,
+          // try changing the seedColor in the colorScheme below to Colors.green
+          // and then invoke "hot reload" (save your changes or press the "hot
+          // reload" button in a Flutter-supported IDE, or press "r" if you used
+          // the command line to start the app).
+          //
+          // Notice that the counter didn't reset back to zero; the application
+          // state is not lost during the reload. To reset the state, use hot
+          // restart instead.
+          //
+          // This works for code too, not just values: Most code changes can be
+          // tested with just a hot reload.
+          colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple),
+          useMaterial3: true,
+        ),
+        home: const Splash(),
+        builder: (context, child) {
+          return MediaQuery(
+            child: child!,
+            data: MediaQuery.of(context)
+                .copyWith(textScaler: const TextScaler.linear(1.0)),
+          );
+        },
       ),
-      home: Globalprovider(child: const MyNavigation()),
-      builder: (context, child) {
-        return MediaQuery(
-          child: child!,
-          data: MediaQuery.of(context)
-              .copyWith(textScaler: const TextScaler.linear(1.0)),
-        );
-      },
     );
   }
 }
