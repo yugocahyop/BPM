@@ -272,9 +272,11 @@ class EepromDataController {
       if (p!.heartRate != null && p!.diastolic != null && p!.systolic != null) {
         await add(p);
 
-        // max++;
+        max++;
 
         processedData.remove(d.time);
+
+        
       }
 
       return;

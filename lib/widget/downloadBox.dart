@@ -133,6 +133,8 @@ class _DownloadBoxState extends State<DownloadBox> {
 
         final dataId = widget.edc.max + 1;
 
+        // print(dataId);
+
         if (widget.edc.processedJson[r.time]!.length == 2) {
           percent = (++downloadCount) / maxData;
 
@@ -147,6 +149,8 @@ class _DownloadBoxState extends State<DownloadBox> {
               countFile++);
 
           widget.edc.processedJson[r.time]!.clear();
+
+          
 
           // widget.ejc.count(finder: Finder(filter: Filter.equals("modelId", modelId))).then((c) {
           //   print("count for modelId $modelId is $c");

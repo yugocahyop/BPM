@@ -38,20 +38,17 @@ class _EepromBpmState extends State<EepromBpm> {
   @override
   void didUpdateWidget(covariant EepromBpm oldWidget) {
     // TODO: implement didUpdateWidget
-    eDataC= EepromDataController();
-    eJsonC= EepromJsonFileDataController();
+    eDataC = EepromDataController();
+    eJsonC = EepromJsonFileDataController();
 
     // print("didUpdateWidget called ${widget.bdc.list.length} ${pc.page}");
     // if (oldWidget.bdc.list.length != widget.bdc.list.length) {
-      if(widget.bdc.list.isEmpty){
-
-        if(pc.page ==1.0 ){
-          pc.animateToPage(0,
-              duration: const Duration(milliseconds: 300),
-              curve: Curves.easeIn);
-        }
+    if (widget.bdc.list.isEmpty) {
+      if (pc.page == 1.0) {
+        pc.animateToPage(0,
+            duration: const Duration(milliseconds: 300), curve: Curves.easeIn);
+      }
       // }
-      
     }
     super.didUpdateWidget(oldWidget);
   }
@@ -190,13 +187,12 @@ class _EepromBpmState extends State<EepromBpm> {
                             //         systolic: e.systolic,
                             //         diastolic: e.diastolic,
                             //         heartRate: e.heartRate,
-                            //         time: e.time)) 
+                            //         time: e.time))
                             //     .toList());
 
                             bDdc.list.clear();
                             // print("eDataC model id ${widget.bdc.list[i].id}");
                             eDataC.find(widget.bdc.list[i].id, 0, () {
-                              
                               bDdc.list.addAll(eDataC.list
                                   .map((e) => BpmDataModel(
                                       systolic: e.systolic,
@@ -255,9 +251,10 @@ class _EepromBpmState extends State<EepromBpm> {
                   bdc: bDdc,
                   padding: EdgeInsets.zero,
                   onTap: (i) {
+                    // print("Tapped item $i");
                     final r = eJsonC.find(eDataC.list[i].id, 0, () {
                       setState(() {});
-          
+
                       final c = Controller();
                       c.cupertinoPageRoute(
                           context,
